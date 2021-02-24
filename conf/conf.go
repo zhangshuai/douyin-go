@@ -49,4 +49,5 @@ const (
 	API_STAR_HOT_LIST                 = "/star/hot_list/"
 	API_STAR_AUTHOR_SCORE_V2          = "/star/author_score_v2/"
 	API_STAR_AUTHOR_SCORE             = "/star/author_score/"
+	API_JS_TICKET                     = "/js/getticket/"
 )

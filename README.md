@@ -404,3 +404,20 @@ body, _ := c.GetRawData()
 signature := c.GetHeader("X-Douyin-Signature")
 manager.WebHookSignature(body, signature)
 ```
+
+**获取jsapi_ticket** `/js/getticket/`
+```go
+ticket, _ := manager.JsTicket(douyinGo.JsTicketReq{
+    AccessToken: "CLIENT_TOKEN",
+})
+```
+
+**根据jsapi_ticket和其他字段进行签名计算**
+```go
+signature := manager.JsConfigSignature(douyinGo.ConfigSignReq{
+    JsTicket:  "JSAPI_TICKET",
+    Timestamp: "TIMESTAMP",
+    NonceStr:  "NONCE_STR",
+    Url:       "URL",
+})
+```
