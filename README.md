@@ -14,7 +14,7 @@ manager := douyinGo.NewManager(credentials, nil)
 **生成授权链接,获取授权码** `/platform/oauth/connect/`
 ```go
 oauthUrl := manager.OauthConnect(douyinGo.OauthParam{
-    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display",
+    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display,fans.data,data.external.fans_source,data.external.fans_favourite",
     RedirectUri: "REDIRECT_URI",
 })
 ```
@@ -407,7 +407,7 @@ manager.WebHookSignature(body, signature)
 
 **获取jsapi_ticket** `/js/getticket/`
 ```go
-ticket, _ := manager.JsTicket(douyinGo.JsTicketReq{
+ticket, err := manager.JsTicket(douyinGo.JsTicketReq{
     AccessToken: "CLIENT_TOKEN",
 })
 ```
@@ -419,5 +419,37 @@ signature := manager.JsConfigSignature(douyinGo.ConfigSignReq{
     Timestamp: "TIMESTAMP",
     NonceStr:  "NONCE_STR",
     Url:       "URL",
+})
+```
+
+**获取用户粉丝数据** `/fans/data/`
+```go
+rs, err := manager.FansData(douyinGo.FansDataReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+})
+```
+
+**获取用户粉丝来源分布** `/data/extern/fans/source/`
+```go
+rs, err := manager.DataExternalFansSource(douyinGo.DataExternalFansSourceReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+})
+```
+
+**获取用户粉丝喜好** `/data/extern/fans/favourite/`
+```go
+rs, err := manager.DataExternalFansFavourite(douyinGo.DataExternalFansFavouriteReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+})
+```
+
+**获取用户粉丝热评** `/data/extern/fans/comment/`
+```go
+rs, err := manager.DataExternalFansComment(douyinGo.DataExternalFansCommentReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
 })
 ```
