@@ -14,7 +14,7 @@ manager := douyinGo.NewManager(credentials, nil)
 **生成授权链接,获取授权码** `/platform/oauth/connect/`
 ```go
 oauthUrl := manager.OauthConnect(douyinGo.OauthParam{
-    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display,fans.data,data.external.fans_source,data.external.fans_favourite",
+    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display,fans.data,data.external.fans_source,data.external.fans_favourite,discovery.ent",
     RedirectUri: "REDIRECT_URI",
 })
 ```
@@ -451,5 +451,23 @@ rs, err := manager.DataExternalFansFavourite(douyinGo.DataExternalFansFavouriteR
 rs, err := manager.DataExternalFansComment(douyinGo.DataExternalFansCommentReq{
     AccessToken: "ACCESS_TOKEN",
     OpenId:      "OPEN_ID",
+})
+```
+
+**获取抖音电影榜、抖音电视剧榜、抖音综艺榜** `/discovery/ent/rank/item/`
+```go
+rs, err := manager.DiscoveryEntRankItem(douyinGo.DiscoveryEntRankItemReq{
+    AccessToken: "CLIENT_TOKEN",
+    Type:        1,
+})
+```
+
+**获取抖音影视综榜单版本** `/discovery/ent/rank/version/`
+```go
+rs, err := manager.DiscoveryEntRankVersion(douyinGo.DiscoveryEntRankVersionReq{
+    AccessToken: "CLIENT_TOKEN",
+    Cursor:      0,
+    Count:       10,
+    Type:        1,
 })
 ```
