@@ -471,3 +471,11 @@ rs, err := manager.DiscoveryEntRankVersion(douyinGo.DiscoveryEntRankVersionReq{
     Type:        1,
 })
 ```
+
+**获取达人榜单数据**
+```go
+rs, err := manager.DataExternalBillboard(douyinGo.DataExternalBillboardReq{
+    AccessToken: "CLIENT_TOKEN",
+    Uri:         douyinGoConf.API_DATA_EXTERNAL_BILLBOARD_STARS, // 响应参数一致,参考 conf/conf.go 替换请求链接
+})
+```
