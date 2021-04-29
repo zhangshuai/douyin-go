@@ -95,4 +95,5 @@ const (
 	API_DATA_EXTERNAL_BILLBOARD_MUSIC_HOT           = "/data/extern/billboard/music/hot/"           // 获取音乐热歌榜数据
 	API_DATA_EXTERNAL_BILLBOARD_MUSIC_SOAR          = "/data/extern/billboard/music/soar/"          // 获取音乐飙升榜数据
 	API_DATA_EXTERNAL_BILLBOARD_MUSIC_ORIGINAL      = "/data/extern/billboard/music/original/"      // 获取音乐原创榜数据
+	API_POI_SEARCH_KEYWORD                          = "/poi/search/keyword/"                        // 查询POI信息
 )

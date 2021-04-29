@@ -508,3 +508,14 @@ rs, err := manager.DataExternalBillboardMusic(douyinGo.DataExternalBillboardMusi
     Uri:         douyinGoConf.API_DATA_EXTERNAL_BILLBOARD_MUSIC_HOT, // 响应参数一致,参考 conf/conf.go 替换请求链接
 })
 ```
+
+**查询POI信息**
+```go
+rs, err := manager.PoiSearchKeyword(douyinGo.PoiSearchKeywordReq{
+    AccessToken: "CLIENT_TOKEN",
+    Cursor:      0,
+    Count:       10,
+    Keyword:     "美食",
+    City:        "北京",
+})
+```
