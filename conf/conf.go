@@ -88,4 +88,11 @@ const (
 	API_DATA_EXTERNAL_BILLBOARD_SPORT_OUTDOORS      = "/data/extern/billboard/sport/outdoors/"      // 获取户外运动榜数据
 	API_DATA_EXTERNAL_BILLBOARD_SPORT_TABLE_TENNIES = "/data/extern/billboard/sport/table_tennis/"  // 获取台球榜数据(非网球数据)
 	API_DATA_EXTERNAL_BILLBOARD_SPORT_CULTURE       = "/data/extern/billboard/sport/culture/"       // 获取运动文化榜数据
+	API_DATA_EXTERNAL_BILLBOARD_TOPIC               = "/data/extern/billboard/topic/"               // 获取话题榜数据
+	API_DATA_EXTERNAL_BILLBOARD_PROP                = "/data/extern/billboard/prop/"                // 获取话题榜数据
+	API_DATA_EXTERNAL_BILLBOARD_HOT_VIDEO           = "/data/extern/billboard/hot_video/"           // 获取热门视频数据
+	API_DATA_EXTERNAL_BILLBOARD_LIVE                = "/data/extern/billboard/live/"                // 获取直播榜数据
+	API_DATA_EXTERNAL_BILLBOARD_MUSIC_HOT           = "/data/extern/billboard/music/hot/"           // 获取音乐热歌榜数据
+	API_DATA_EXTERNAL_BILLBOARD_MUSIC_SOAR          = "/data/extern/billboard/music/soar/"          // 获取音乐飙升榜数据
+	API_DATA_EXTERNAL_BILLBOARD_MUSIC_ORIGINAL      = "/data/extern/billboard/music/original/"      // 获取音乐原创榜数据
 )

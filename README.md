@@ -479,3 +479,32 @@ rs, err := manager.DataExternalBillboard(douyinGo.DataExternalBillboardReq{
     Uri:         douyinGoConf.API_DATA_EXTERNAL_BILLBOARD_STARS, // 响应参数一致,参考 conf/conf.go 替换请求链接
 })
 ```
+
+**获取道具榜单数据**
+```go
+rs, err := manager.DataExternalBillboardProp(douyinGo.DataExternalBillboardPropReq{
+    AccessToken: "CLIENT_TOKEN",
+})
+```
+
+**获取热门视频数据**
+```go
+rs, err := manager.DataExternalBillboardHotVideo(douyinGo.DataExternalBillboardHotVideoReq{
+    AccessToken: "CLIENT_TOKEN",
+})
+```
+
+**获取直播榜数据**
+```go
+rs, err := manager.DataExternalBillboardLive(douyinGo.DataExternalBillboardLiveReq{
+    AccessToken: "CLIENT_TOKEN",
+})
+```
+
+**获取音乐榜单数据**
+```go
+rs, err := manager.DataExternalBillboardMusic(douyinGo.DataExternalBillboardMusicReq{
+    AccessToken: "CLIENT_TOKEN",
+    Uri:         douyinGoConf.API_DATA_EXTERNAL_BILLBOARD_MUSIC_HOT, // 响应参数一致,参考 conf/conf.go 替换请求链接
+})
+```
