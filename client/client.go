@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -257,6 +258,8 @@ func ResponseError(resp *http.Response) (err error) {
 				}
 				e.Err = strings.TrimRight(string(bs), "\n")
 			}
+		} else if resp.Status != "" {
+			return errors.New(resp.Status)
 		}
 	}
 	return e

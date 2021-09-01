@@ -14,7 +14,7 @@ manager := douyinGo.NewManager(credentials, nil)
 **生成授权链接,获取授权码** `/platform/oauth/connect/`
 ```go
 oauthUrl := manager.OauthConnect(douyinGo.OauthParam{
-    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display,fans.data,data.external.fans_source,data.external.fans_favourite,discovery.ent",
+    Scope: "user_info,mobile_alert,video.list,video.data,video.create,video.delete,data.external.user,data.external.item,aweme.share,fans.list,following.list,item.comment,star_top_score_display,fans.data,data.external.fans_source,data.external.fans_favourite,discovery.ent,video.search,video.search.comment,fans.check",
     RedirectUri: "REDIRECT_URI",
 })
 ```
@@ -480,21 +480,21 @@ rs, err := manager.DataExternalBillboard(douyinGo.DataExternalBillboardReq{
 })
 ```
 
-**获取道具榜单数据**
+**获取道具榜单数据** `/data/extern/billboard/prop/`
 ```go
 rs, err := manager.DataExternalBillboardProp(douyinGo.DataExternalBillboardPropReq{
     AccessToken: "CLIENT_TOKEN",
 })
 ```
 
-**获取热门视频数据**
+**获取热门视频数据** `/data/extern/billboard/hot_video/`
 ```go
 rs, err := manager.DataExternalBillboardHotVideo(douyinGo.DataExternalBillboardHotVideoReq{
     AccessToken: "CLIENT_TOKEN",
 })
 ```
 
-**获取直播榜数据**
+**获取直播榜数据** `/data/extern/billboard/live/`
 ```go
 rs, err := manager.DataExternalBillboardLive(douyinGo.DataExternalBillboardLiveReq{
     AccessToken: "CLIENT_TOKEN",
@@ -509,7 +509,7 @@ rs, err := manager.DataExternalBillboardMusic(douyinGo.DataExternalBillboardMusi
 })
 ```
 
-**查询POI信息**
+**查询POI信息** `/poi/search/keyword/`
 ```go
 rs, err := manager.PoiSearchKeyword(douyinGo.PoiSearchKeywordReq{
     AccessToken: "CLIENT_TOKEN",
@@ -517,5 +517,59 @@ rs, err := manager.PoiSearchKeyword(douyinGo.PoiSearchKeywordReq{
     Count:       10,
     Keyword:     "美食",
     City:        "北京",
+})
+```
+
+**关键词视频搜索** `/video/search/`
+```go
+rs, err := manager.VideoSearch(douyinGo.VideoSearchReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+    Count:       10,
+    Cursor:      0,
+    Keyword:     "美食",
+})
+```
+
+**关键词视频评论列表** `/video/search/comment/list/`
+```go
+rs, err := manager.VideoSearchCommentList(douyinGo.VideoSearchCommentListReq{
+    AccessToken: "CLIENT_TOKEN",
+    Count:       10,
+    Cursor:      0,
+    SecItemId:   "SEC_ITEM_ID",
+})
+```
+
+**关键词视频评论回复列表** `/video/search/comment/reply/list/`
+```go
+rs, err := manager.VideoSearchCommentReplyList(douyinGo.VideoSearchCommentReplyListReq{
+    AccessToken: "CLIENT_TOKEN",
+    Count:       10,
+    Cursor:      0,
+    SecItemId:   "SEC_ITEM_ID",
+    CommentId:   "COMMENT_ID",
+})
+```
+
+**关键词视频评论回复** `/video/search/comment/reply/`
+```go
+rs, err := manager.VideoSearchCommentReply(douyinGo.VideoSearchCommentReplyReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+    Body: douyinGo.VideoSearchCommentReplyBody{
+        CommentId: "COMMENT_ID",
+        SecItemId: "SEC_ITEM_ID",
+        Content:   "CONTENT",
+    },
+})
+```
+
+**粉丝判断** `/fans/check/`
+```go
+rs, err := manager.FansCheck(douyinGo.FansCheckReq{
+    AccessToken:    "ACCESS_TOKEN",
+    OpenId:         "OPEN_ID",
+	FollowerOpenId: "FOLLOWER_OPEN_ID",
 })
 ```

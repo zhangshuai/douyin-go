@@ -42,3 +42,26 @@ func (m *Manager) FansList(req FansListReq) (res FansListRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s&cursor=%d&count=%d", conf.API_FANS_LIST, req.AccessToken, req.OpenId, req.Cursor, req.Count), nil, nil)
 	return res, err
 }
+
+type FansCheckReq struct {
+	OpenId         string // 通过/oauth/access_token/获取，用户唯一标志
+	FollowerOpenId string
+	AccessToken    string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+}
+
+type FansCheckData struct {
+	IsFollower bool  `json:"is_follower"` // follower_open_id是否关注了open_id
+	FollowTime int64 `json:"follow_time"` // 若关注了，则返回关注时间。单位为秒级时间戳
+	DYError
+}
+
+type FansCheckRes struct {
+	Data  FansCheckData `json:"data"`
+	Extra DYExtra       `json:"extra"`
+}
+
+// 粉丝判断
+func (m *Manager) FansCheck(req FansCheckReq) (res FansCheckRes, err error) {
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s&follower_open_id=%s", conf.API_FANS_CHECK, req.AccessToken, req.OpenId, req.FollowerOpenId), nil, nil)
+	return res, err
+}
