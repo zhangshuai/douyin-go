@@ -146,7 +146,7 @@ rs, err := manager.ImageUpload(douyinGo.ImageUploadReq{
 
 **发布图片** `/image/create/`
 ```go
-rt, err := manager.ImageCreate(douyinGo.ImageCreateReq{
+rs, err := manager.ImageCreate(douyinGo.ImageCreateReq{
     AccessToken: "ACCESS_TOKEN",
     OpenId:      "OPEN_ID",
     Body: douyinGo.ImageCreateBody{
@@ -472,7 +472,7 @@ rs, err := manager.DiscoveryEntRankVersion(douyinGo.DiscoveryEntRankVersionReq{
 })
 ```
 
-**获取达人榜单数据**
+**获取达人榜单数据** `/data/extern/billboard/stars/`
 ```go
 rs, err := manager.DataExternalBillboard(douyinGo.DataExternalBillboardReq{
     AccessToken: "CLIENT_TOKEN",
@@ -501,7 +501,7 @@ rs, err := manager.DataExternalBillboardLive(douyinGo.DataExternalBillboardLiveR
 })
 ```
 
-**获取音乐榜单数据**
+**获取音乐榜单数据** `/data/extern/billboard/music/hot/`
 ```go
 rs, err := manager.DataExternalBillboardMusic(douyinGo.DataExternalBillboardMusicReq{
     AccessToken: "CLIENT_TOKEN",
@@ -570,6 +570,6 @@ rs, err := manager.VideoSearchCommentReply(douyinGo.VideoSearchCommentReplyReq{
 rs, err := manager.FansCheck(douyinGo.FansCheckReq{
     AccessToken:    "ACCESS_TOKEN",
     OpenId:         "OPEN_ID",
-	FollowerOpenId: "FOLLOWER_OPEN_ID",
+    FollowerOpenId: "FOLLOWER_OPEN_ID",
 })
 ```
