@@ -192,7 +192,7 @@ type DataExternalBillboardTopicRes struct {
 	Extra DYExtra                        `json:"extra"`
 }
 
-// 获取音乐榜单数据
+// 获取话题榜单数据
 func (m *Manager) DataExternalBillboardTopic(req DataExternalBillboardTopicReq) (res DataExternalBillboardTopicRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s", req.Uri, req.AccessToken), nil, nil)
 	return res, err
