@@ -509,6 +509,14 @@ rs, err := manager.DataExternalBillboardMusic(douyinGo.DataExternalBillboardMusi
 })
 ```
 
+**获取话题榜单数据** `/data/extern/billboard/topic/`
+```go
+rs, err := manager.DataExternalBillboardTopic(douyinGo.DataExternalBillboardTopicReq{
+    AccessToken: "CLIENT_TOKEN",
+    Uri:         douyinGoConf.API_DATA_EXTERNAL_BILLBOARD_TOPIC, // 响应参数一致,参考 conf/conf.go 替换请求链接
+})
+```
+
 **查询POI信息** `/poi/search/keyword/`
 ```go
 rs, err := manager.PoiSearchKeyword(douyinGo.PoiSearchKeywordReq{

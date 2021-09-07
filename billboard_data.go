@@ -169,3 +169,31 @@ func (m *Manager) DataExternalBillboardMusic(req DataExternalBillboardMusicReq) 
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s", req.Uri, req.AccessToken), nil, nil)
 	return res, err
 }
+
+type DataExternalBillboardTopicReq struct {
+	AccessToken string // 调用/oauth/client_token/生成的token，此token不需要用户授权。
+	Uri         string
+}
+
+type DataExternalBillboardTopicItem struct {
+	Rank        int32   `json:"rank"`         // 排名
+	RankChange  string  `json:"rank_change"`  // 排名变化
+	Title       string  `json:"title"`        // 话题标题
+	EffectValue float64 `json:"effect_value"` // 影响力指数
+}
+
+type DataExternalBillboardTopicData struct {
+	List []DataExternalBillboardTopicItem `json:"list"`
+	DYError
+}
+
+type DataExternalBillboardTopicRes struct {
+	Data  DataExternalBillboardTopicData `json:"data"`
+	Extra DYExtra                        `json:"extra"`
+}
+
+// 获取音乐榜单数据
+func (m *Manager) DataExternalBillboardTopic(req DataExternalBillboardTopicReq) (res DataExternalBillboardTopicRes, err error) {
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s", req.Uri, req.AccessToken), nil, nil)
+	return res, err
+}
