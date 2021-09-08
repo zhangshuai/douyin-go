@@ -1,10 +1,17 @@
-# douyin-go 抖音Open API
+# Douyin SDK for Go
 
-### 1.安装
+[![Build](https://img.shields.io/badge/github-passing-green?style=flat&logo=github)](https://github.com/zhangshuai/douyin-go/actions/workflows/go.yml)
+[![Version](https://img.shields.io/github/release/zhangshuai/douyin-go.svg?style=flat)](https://github.com/zhangshuai/douyin-go/releases/latest)
+[![Reference](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](http://godoc.org/github.com/zhangshuai/douyin-go)
+[![Licence](https://img.shields.io/github/license/zhangshuai/douyin-go?style=flat)](https://github.com/zhangshuai/douyin-go/blob/master/LICENSE)
+
+抖音开放平台SDK
+
+## 安装
 ```go
 import douyinGo "github.com/zhangshuai/douyin-go"
 ```
-### 2.使用
+## 使用
 **初始化**
 ```go
 credentials := douyinGo.NewCredentials("CLIENT_KEY", "CLIENT_SECRET")
