@@ -1,1 +1,1 @@
-package douyinGo
+package douyingo

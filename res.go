@@ -1,5 +1,6 @@
-package douyinGo
+package douyingo
 
+// DYExtra 响应结构体
 type DYExtra struct {
 	LogId         string `json:"logid"`                     // 标识请求的唯一id
 	Now           uint64 `json:"now"`                       // 毫秒级时间戳

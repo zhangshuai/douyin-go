@@ -1,4 +1,4 @@
-package douyinGo
+package douyingo
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"github.com/zhangshuai/douyin-go/conf"
 )
 
+// PoiSearchKeywordReq POI信息请求
 type PoiSearchKeywordReq struct {
 	AccessToken string // 调用/oauth/client_token/生成的token，此token不需要用户授权。
 	Cursor      int64  // 分页游标, 第一页请求cursor是0, response中会返回下一页请求用到的cursor, 同时response还会返回has_more来表明是否有更多的数据。
@@ -14,6 +15,7 @@ type PoiSearchKeywordReq struct {
 	City        string // 城市
 }
 
+// Poi POI信息
 type Poi struct {
 	CountryCode string `json:"country_code"` // 国家编码
 	PoiId       string `json:"poi_id"`       // 唯一ID
@@ -27,6 +29,7 @@ type Poi struct {
 	Country     string `json:"country"`      // 国家
 }
 
+// PoiSearchKeywordData POI信息
 type PoiSearchKeywordData struct {
 	Pois    []Poi `json:"pois"`
 	Cursor  int64 `json:"cursor"`   // 用于下一页请求的cursor
@@ -34,12 +37,13 @@ type PoiSearchKeywordData struct {
 	DYError
 }
 
+// PoiSearchKeywordRes POI信息
 type PoiSearchKeywordRes struct {
 	Data  PoiSearchKeywordData `json:"data"`
 	Extra DYExtra              `json:"extra"`
 }
 
-// 查询POI信息
+// PoiSearchKeyword 查询POI信息
 func (m *Manager) PoiSearchKeyword(req PoiSearchKeywordReq) (res PoiSearchKeywordRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&cursor=%d&count=%d&keyword=%s&city=%s", conf.API_POI_SEARCH_KEYWORD, req.AccessToken, req.Cursor, req.Count, req.Keyword, req.City), nil, nil)
 	return res, err

@@ -11,19 +11,22 @@ import (
 	"net/http"
 	"net/http/httptrace"
 	"net/http/httputil"
-	"net/url"
 	"strings"
 
-	"github.com/zhangshuai/douyin-go/auth"
 	"github.com/zhangshuai/douyin-go/internal/log"
 	"github.com/zhangshuai/douyin-go/reqid"
 )
 
+// UserAgent UA
 var UserAgent = "Golang douyin/client package"
+
+// DefaultClient 默认Client
 var DefaultClient = Client{&http.Client{Transport: http.DefaultTransport}}
 
-// 用来打印调试信息
+// DebugMode 用来打印调试信息
 var DebugMode = false
+
+// DeepDebugInfo 调试信息
 var DeepDebugInfo = false
 
 // --------------------------------------------------------------------
@@ -37,8 +40,6 @@ type Client struct {
 func TurnOnDebug() {
 	DebugMode = true
 }
-
-// --------------------------------------------------------------------
 
 func newRequest(ctx context.Context, method, reqUrl string, headers http.Header, body io.Reader) (req *http.Request, err error) {
 	req, err = http.NewRequest(method, reqUrl, body)
@@ -71,14 +72,7 @@ func newRequest(ctx context.Context, method, reqUrl string, headers http.Header,
 	return
 }
 
-func (r Client) DoRequest(ctx context.Context, method, reqUrl string, headers http.Header) (resp *http.Response, err error) {
-	req, err := newRequest(ctx, method, reqUrl, headers, nil)
-	if err != nil {
-		return
-	}
-	return r.Do(ctx, req)
-}
-
+// DoRequestWith 请求
 func (r Client) DoRequestWith(ctx context.Context, method, reqUrl string, headers http.Header, body io.Reader,
 	bodyLength int) (resp *http.Response, err error) {
 
@@ -90,38 +84,7 @@ func (r Client) DoRequestWith(ctx context.Context, method, reqUrl string, header
 	return r.Do(ctx, req)
 }
 
-func (r Client) DoRequestWith64(ctx context.Context, method, reqUrl string, headers http.Header, body io.Reader,
-	bodyLength int64) (resp *http.Response, err error) {
-
-	req, err := newRequest(ctx, method, reqUrl, headers, body)
-	if err != nil {
-		return
-	}
-	req.ContentLength = bodyLength
-	return r.Do(ctx, req)
-}
-
-func (r Client) DoRequestWithForm(ctx context.Context, method, reqUrl string, headers http.Header,
-	data map[string][]string) (resp *http.Response, err error) {
-
-	if headers == nil {
-		headers = http.Header{}
-	}
-	headers.Add("Content-Type", "application/x-www-form-urlencoded")
-
-	requestData := url.Values(data).Encode()
-	if method == "GET" || method == "HEAD" || method == "DELETE" {
-		if strings.ContainsRune(reqUrl, '?') {
-			reqUrl += "&"
-		} else {
-			reqUrl += "?"
-		}
-		return r.DoRequest(ctx, method, reqUrl+requestData, headers)
-	}
-
-	return r.DoRequestWith(ctx, method, reqUrl, headers, strings.NewReader(requestData), len(requestData))
-}
-
+// DoRequestWithJson JSON请求
 func (r Client) DoRequestWithJson(ctx context.Context, method, reqUrl string, headers http.Header,
 	data interface{}) (resp *http.Response, err error) {
 
@@ -140,13 +103,13 @@ func (r Client) DoRequestWithJson(ctx context.Context, method, reqUrl string, he
 	return r.DoRequestWith(ctx, method, reqUrl, headers, bytes.NewReader(reqBody), len(reqBody))
 }
 
+// Do 请求
 func (r Client) Do(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-
 	if ctx == nil {
 		ctx = context.Background()
 	}
 
-	if reqId, ok := reqid.ReqidFromContext(ctx); ok {
+	if reqId, ok := reqid.FromContext(ctx); ok {
 		req.Header.Set("X-Reqid", reqId)
 	}
 
@@ -187,8 +150,7 @@ func (r Client) Do(ctx context.Context, req *http.Request) (resp *http.Response,
 	return
 }
 
-// --------------------------------------------------------------------
-
+// ErrorInfo 错误信息
 type ErrorInfo struct {
 	Err   string `json:"error,omitempty"`
 	Key   string `json:"key,omitempty"`
@@ -197,31 +159,12 @@ type ErrorInfo struct {
 	Code  int    `json:"code"`
 }
 
-func (r *ErrorInfo) ErrorDetail() string {
-
-	msg, _ := json.Marshal(r)
-	return string(msg)
-}
-
+// Error 错误
 func (r *ErrorInfo) Error() string {
-
 	return r.Err
 }
 
-func (r *ErrorInfo) RpcError() (code, errno int, key, err string) {
-
-	return r.Code, r.Errno, r.Key, r.Err
-}
-
-func (r *ErrorInfo) HttpCode() int {
-
-	return r.Code
-}
-
-// --------------------------------------------------------------------
-
 func parseError(e *ErrorInfo, r io.Reader) {
-
 	body, err1 := ioutil.ReadAll(r)
 	if err1 != nil {
 		e.Err = err1.Error()
@@ -240,8 +183,8 @@ func parseError(e *ErrorInfo, r io.Reader) {
 	e.Err = string(body)
 }
 
-func ResponseError(resp *http.Response) (err error) {
-
+// ResponseError 错误响应
+func ResponseError(resp *http.Response) error {
 	e := &ErrorInfo{
 		Reqid: resp.Header.Get("X-Reqid"),
 		Code:  resp.StatusCode,
@@ -254,7 +197,7 @@ func ResponseError(resp *http.Response) (err error) {
 			} else {
 				bs, rErr := ioutil.ReadAll(resp.Body)
 				if rErr != nil {
-					err = rErr
+					e.Err = rErr.Error()
 				}
 				e.Err = strings.TrimRight(string(bs), "\n")
 			}
@@ -265,8 +208,8 @@ func ResponseError(resp *http.Response) (err error) {
 	return e
 }
 
+// CallRet Http请求
 func CallRet(ctx context.Context, ret interface{}, resp *http.Response) (err error) {
-
 	defer func() {
 		io.Copy(ioutil.Discard, resp.Body)
 		resp.Body.Close()
@@ -294,16 +237,7 @@ func CallRet(ctx context.Context, ret interface{}, resp *http.Response) (err err
 	return ResponseError(resp)
 }
 
-func (r Client) CallWithForm(ctx context.Context, ret interface{}, method, reqUrl string, headers http.Header,
-	param map[string][]string) (err error) {
-
-	resp, err := r.DoRequestWithForm(ctx, method, reqUrl, headers, param)
-	if err != nil {
-		return err
-	}
-	return CallRet(ctx, ret, resp)
-}
-
+// CallWithJson JSON请求
 func (r Client) CallWithJson(ctx context.Context, ret interface{}, method, reqUrl string, headers http.Header,
 	param interface{}) (err error) {
 
@@ -314,15 +248,19 @@ func (r Client) CallWithJson(ctx context.Context, ret interface{}, method, reqUr
 	return CallRet(ctx, ret, resp)
 }
 
-func (r Client) CallWith(ctx context.Context, ret interface{}, method, reqUrl string, headers http.Header, body io.Reader, bodyLength int) (err error) {
+// DoRequestWith64 请求
+func (r Client) DoRequestWith64(ctx context.Context, method, reqUrl string, headers http.Header, body io.Reader,
+	bodyLength int64) (resp *http.Response, err error) {
 
-	resp, err := r.DoRequestWith(ctx, method, reqUrl, headers, body, bodyLength)
+	req, err := newRequest(ctx, method, reqUrl, headers, body)
 	if err != nil {
-		return err
+		return
 	}
-	return CallRet(ctx, ret, resp)
+	req.ContentLength = bodyLength
+	return r.Do(ctx, req)
 }
 
+// CallWith64 请求
 func (r Client) CallWith64(ctx context.Context, ret interface{}, method, reqUrl string, headers http.Header, body io.Reader,
 	bodyLength int64) (err error) {
 
@@ -333,47 +271,6 @@ func (r Client) CallWith64(ctx context.Context, ret interface{}, method, reqUrl 
 	return CallRet(ctx, ret, resp)
 }
 
-func (r Client) Call(ctx context.Context, ret interface{}, method, reqUrl string, headers http.Header) (err error) {
-
-	resp, err := r.DoRequestWith(ctx, method, reqUrl, headers, nil, 0)
-	if err != nil {
-		return err
-	}
-	return CallRet(ctx, ret, resp)
-}
-
-func (r Client) CredentialedCallWithForm(ctx context.Context, cred *auth.Credentials, tokenType auth.TokenType, ret interface{},
-	method, reqUrl string, headers http.Header, param map[string][]string) error {
-	ctx = auth.WithCredentialsType(ctx, cred, tokenType)
-	return r.CallWithForm(ctx, ret, method, reqUrl, headers, param)
-}
-
-func (r Client) CredentialedCallWithJson(ctx context.Context, cred *auth.Credentials, tokenType auth.TokenType, ret interface{},
-	method, reqUrl string, headers http.Header, param interface{}) error {
-	ctx = auth.WithCredentialsType(ctx, cred, tokenType)
-	return r.CallWithJson(ctx, ret, method, reqUrl, headers, param)
-}
-
-func (r Client) CredentialedCallWith(ctx context.Context, cred *auth.Credentials, tokenType auth.TokenType, ret interface{},
-	method, reqUrl string, headers http.Header, body io.Reader, bodyLength int) error {
-	ctx = auth.WithCredentialsType(ctx, cred, tokenType)
-	return r.CallWith(ctx, ret, method, reqUrl, headers, body, bodyLength)
-}
-
-func (r Client) CredentialedCallWith64(ctx context.Context, cred *auth.Credentials, tokenType auth.TokenType, ret interface{},
-	method, reqUrl string, headers http.Header, body io.Reader, bodyLength int64) error {
-	ctx = auth.WithCredentialsType(ctx, cred, tokenType)
-	return r.CallWith64(ctx, ret, method, reqUrl, headers, body, bodyLength)
-}
-
-func (r Client) CredentialedCall(ctx context.Context, cred *auth.Credentials, tokenType auth.TokenType, ret interface{},
-	method, reqUrl string, headers http.Header) error {
-	ctx = auth.WithCredentialsType(ctx, cred, tokenType)
-	return r.Call(ctx, ret, method, reqUrl, headers)
-}
-
-// ---------------------------------------------------------------------------
-
 type requestCanceler interface {
 	CancelRequest(req *http.Request)
 }
@@ -383,7 +280,6 @@ type nestedObjectGetter interface {
 }
 
 func getRequestCanceler(tp http.RoundTripper) (rc requestCanceler, ok bool) {
-
 	if rc, ok = tp.(requestCanceler); ok {
 		return
 	}
@@ -400,5 +296,3 @@ func getRequestCanceler(tp http.RoundTripper) (rc requestCanceler, ok bool) {
 		}
 	}
 }
-
-// --------------------------------------------------------------------

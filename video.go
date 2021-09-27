@@ -1,4 +1,4 @@
-package douyinGo
+package douyingo
 
 import (
 	"bytes"
@@ -22,6 +22,7 @@ const (
 	defaultChunkSize = 20 * 1024 * 1024 // 默认的分片大小，20MB
 )
 
+// VideoListReq 视频列表请求
 type VideoListReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
@@ -29,6 +30,7 @@ type VideoListReq struct {
 	Count       int64  // 每页数量
 }
 
+// Video 视频列表
 type Statistics struct {
 	ShareCount    int `json:"share_count"`    // 分享数
 	CommentCount  int `json:"comment_count"`  // 评论数
@@ -38,6 +40,7 @@ type Statistics struct {
 	PlayCount     int `json:"play_count"`     // 播放数，只有作者本人可见。公开视频设为私密后，播放数也会返回0。
 }
 
+// Video 视频列表
 type Video struct {
 	Cover       string     `json:"cover"`        // 视频封面
 	Statistics  Statistics `json:"statistics"`   // 统计数据
@@ -50,6 +53,7 @@ type Video struct {
 	VideoStatus int        `json:"video_status"` // 表示视频状态。1:已发布;2:不适宜公开;4:审核中
 }
 
+// VideoListResData 视频列表
 type VideoListResData struct {
 	List    []Video `json:"list"`     // 视频列表
 	Cursor  int64   `json:"cursor"`   // 用于下一页请求的cursor
@@ -57,40 +61,45 @@ type VideoListResData struct {
 	DYError
 }
 
+// VideoListRes 视频列表
 type VideoListRes struct {
 	Data  VideoListResData `json:"data"`
 	Extra DYExtra          `json:"extra"`
 }
 
-// 查询授权账号视频数据
+// VideoList 查询授权账号视频数据
 func (m *Manager) VideoList(req VideoListReq) (res VideoListRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s&cursor=%d&count=%d", conf.API_VIDEO_LIST, req.AccessToken, req.OpenId, req.Cursor, req.Count), nil, nil)
 	return res, err
 }
 
+// VideoUploadReq 上传视频到文件服务器
 type VideoUploadReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	FilePath    string // 文件路径
 }
 
+// VideoUploadResVideo 上传视频到文件服务器
 type VideoUploadResVideo struct {
 	Height  int64  `json:"height"`   // 视频高度
 	Width   int64  `json:"width"`    // 视频宽度
 	VideoId string `json:"video_id"` // 视频id
 }
 
+// VideoUploadRes 上传视频到文件服务器
 type VideoUploadResData struct {
 	Video VideoUploadResVideo `json:"video,omitempty"`
 	DYError
 }
 
+// VideoUploadRes 上传视频到文件服务器
 type VideoUploadRes struct {
 	Data  VideoUploadResData `json:"data"`
 	Extra DYExtra            `json:"extra"`
 }
 
-// 上传视频到文件服务器
+// VideoUpload 上传视频到文件服务器
 func (m *Manager) VideoUpload(req VideoUploadReq) (res *VideoUploadRes, err error) {
 	f, err := os.Open(req.FilePath)
 	if err != nil {
@@ -127,12 +136,14 @@ func (m *Manager) VideoUpload(req VideoUploadReq) (res *VideoUploadRes, err erro
 	return res, err
 }
 
+// VideoCreateBody 创建抖音视频请求
 type VideoCreateReq struct {
 	OpenId      string          // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string          // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	Body        VideoCreateBody // 创建视频body
 }
 
+// VideoCreateBody 创建抖音视频
 type VideoCreateBody struct {
 	TimelinessLabel   int64    `json:"timeliness_label,omitempty"`   // 时效新闻标签，1表示使用。暂不开放
 	ArticlId          string   `json:"article_id,omitempty"`         // 文章ID，暂不开放
@@ -151,94 +162,108 @@ type VideoCreateBody struct {
 	Text              string   `json:"text,omitempty"`               // 视频标题， 可以带话题,@用户。 如title1#话题1 #话题2 @openid1 注意： 1. 话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
 }
 
+// VideoCreateResData 创建抖音视频
 type VideoCreateResData struct {
 	ItemId string `json:"item_id"` // 视频id
 	DYError
 }
 
+// VideoCreateRes 创建抖音视频
 type VideoCreateRes struct {
 	Data  VideoCreateResData `json:"data"`
 	Extra DYExtra            `json:"extra"`
 }
 
-// 创建抖音视频
+// VideoCreate 创建抖音视频
 func (m *Manager) VideoCreate(req VideoCreateReq) (res VideoCreateRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s", conf.API_VIDEO_CREATE, req.AccessToken, req.OpenId), nil, req.Body)
 	return res, err
 }
 
+// VideoDeleteReq 删除视频请求
 type VideoDeleteReq struct {
 	OpenId      string          // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string          // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	Body        VideoDeleteBody // 删除视频body
 }
 
+// VideoDeleteBody 删除视频
 type VideoDeleteBody struct {
 	ItemId string `json:"item_id,omitempty"` // 抖音视频id
 }
 
+// VideoDeleteResData 删除视频
 type VideoDeleteResData struct {
 	DYError
 }
 
+// VideoDeleteRes 删除视频
 type VideoDeleteRes struct {
 	Data  VideoDeleteResData `json:"data"`
 	Extra DYExtra            `json:"extra"`
 }
 
-// 删除授权用户发布的视频
+// VideoDelete 删除授权用户发布的视频
 func (m *Manager) VideoDelete(req VideoDeleteReq) (res VideoDeleteRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s", conf.API_VIDEO_DELETE, req.AccessToken, req.OpenId), nil, req.Body)
 	return res, err
 }
 
+// VideoDataReq 视频数据请求
 type VideoDataReq struct {
 	OpenId      string        // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string        // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	Body        VideoDataBody // 视频数据body
 }
 
+// VideoDataBody 视频数据
 type VideoDataBody struct {
 	ItemIds []string `json:"item_ids"` // item_id数组，仅能查询access_token对应用户上传的视频
 }
 
+// VideoDataResData 视频数据
 type VideoDataResData struct {
 	List []Video `json:"list"` // 视频数据列表
 	DYError
 }
 
+// VideoDataRes 视频数据
 type VideoDataRes struct {
 	Data  VideoDataResData `json:"data"`
 	Extra DYExtra          `json:"extra"`
 }
 
-// 查询指定视频数据
+// VideoData 查询指定视频数据
 func (m *Manager) VideoData(req VideoDataReq) (res VideoDataRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s", conf.API_VIDEO_DATA, req.AccessToken, req.OpenId), nil, req.Body)
 	return res, err
 }
 
+// VideoPartUploadInitReq 初始化分片上传请求
 type VideoPartUploadInitReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
+// VideoPartUploadInitResData 初始化分片上传
 type VideoPartUploadInitResData struct {
 	UploadId string `json:"upload_id"` // 上传id
 	DYError
 }
 
+// VideoPartUploadInitRes 初始化分片上传
 type VideoPartUploadInitRes struct {
 	Data  VideoPartUploadInitResData `json:"data"`
 	Extra DYExtra                    `json:"extra"`
 }
 
-// 初始化上传
+// VideoPartUploadInit 初始化分片上传
 func (m *Manager) VideoPartUploadInit(req VideoPartUploadInitReq) (res VideoPartUploadInitRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s", conf.API_VIDEO_UPLOAD_PART_INIT, req.AccessToken, req.OpenId), nil, nil)
 	return res, err
 }
 
+// VideoPartUploadReq 上传视频分片到文件服务器请求
 type VideoPartUploadReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
@@ -248,16 +273,18 @@ type VideoPartUploadReq struct {
 	Workers     uint   // 并发上传的块数量
 }
 
+// VideoPartUploadData 上传视频分片到文件服务器
 type VideoPartUploadData struct {
 	DYError
 }
 
+// VideoPartUploadRes 上传视频分片到文件服务器
 type VideoPartUploadRes struct {
 	Data  VideoPartUploadData `json:"data"`
 	Extra DYExtra             `json:"extra"`
 }
 
-// 上传视频分片到文件服务器
+// VideoPartUpload 上传视频分片到文件服务器
 func (m *Manager) VideoPartUpload(req VideoPartUploadReq) (res *VideoPartUploadRes, err error) {
 	f, err := os.Open(req.FilePath)
 	if err != nil {
@@ -276,7 +303,6 @@ func (m *Manager) VideoPartUpload(req VideoPartUploadReq) (res *VideoPartUploadR
 		chunkSize int64 = defaultChunkSize
 		wg        sync.WaitGroup
 	)
-	tasks := make(chan bool, workers)
 
 	if req.ChunkSize > 0 {
 		chunkSize = req.ChunkSize
@@ -284,6 +310,7 @@ func (m *Manager) VideoPartUpload(req VideoPartUploadReq) (res *VideoPartUploadR
 	if req.Workers > 0 {
 		workers = req.Workers
 	}
+	tasks := make(chan bool, workers)
 	chunkTotal := int(fsize/int64(chunkSize) + 1)
 
 	for i := 1; i <= chunkTotal; i++ {
@@ -326,18 +353,20 @@ func (m *Manager) VideoPartUpload(req VideoPartUploadReq) (res *VideoPartUploadR
 	return res, err
 }
 
+// VideoUploadPartCompleteReq 上传视频请求
 type VideoUploadPartCompleteReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	UploadId    string // 分片上传的标记。有限时间为2小时。
 }
 
+// VideoUploadPartCompleteRes 上传视频
 type VideoUploadPartCompleteRes struct {
 	Data  VideoUploadResData `json:"data"`
 	Extra DYExtra            `json:"extra"`
 }
 
-// 完成上传
+// VideoUploadPartComplete 完成上传视频
 func (m *Manager) VideoUploadPartComplete(req VideoUploadPartCompleteReq) (res VideoUploadPartCompleteRes, err error) {
 	uploadId := url.QueryEscape(req.UploadId)
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s&upload_id=%s", conf.API_VIDEO_UPLOAD_PART_COMPLETE, req.AccessToken, req.OpenId, uploadId), nil, nil)

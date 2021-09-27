@@ -1,4 +1,4 @@
-package douyinGo
+package douyingo
 
 import (
 	"fmt"
@@ -9,15 +9,18 @@ import (
 	"github.com/zhangshuai/douyin-go/conf"
 )
 
+// Manager Manager结构体
 type Manager struct {
 	client      *client.Client
 	Credentials *auth.Credentials
 }
 
+// NewCredentials 获取认证
 func NewCredentials(clientKey, clientSecret string) *auth.Credentials {
 	return auth.New(clientKey, clientSecret)
 }
 
+// NewManager 创建新的Manager
 func NewManager(credentials *auth.Credentials, tr http.RoundTripper) *Manager {
 	client := client.DefaultClient
 	client.Transport = newTransport(credentials, nil)

@@ -1,4 +1,4 @@
-package douyinGo
+package douyingo
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"github.com/zhangshuai/douyin-go/conf"
 )
 
+// FollowingListReq 关注列表请求
 type FollowingListReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
@@ -13,6 +14,7 @@ type FollowingListReq struct {
 	Count       int64  // 每页数量
 }
 
+// Following 关注列表
 type Following struct {
 	Nickname string `json:"nickname"` // 昵称
 	Province string `json:"province"` // 省
@@ -24,6 +26,7 @@ type Following struct {
 	UnionId  string `json:"union_id"` // 用户在当前开发者账号下的唯一标识（未绑定开发者账号没有该字段）
 }
 
+// FollowingListData 关注列表
 type FollowingListData struct {
 	List    []Following `json:"list"`     // 关注列表
 	Cursor  int64       `json:"cursor"`   // 用于下一页请求的cursor
@@ -31,12 +34,13 @@ type FollowingListData struct {
 	DYError
 }
 
+// FollowingListRes 关注列表
 type FollowingListRes struct {
 	Data  FollowingListData `json:"data"`
 	Extra DYExtra           `json:"extra"`
 }
 
-// 获取关注列表
+// FollowingList 获取关注列表
 func (m *Manager) FollowingList(req FollowingListReq) (res FollowingListRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s&cursor=%d&count=%d", conf.API_FOLLOWING_LIST, req.AccessToken, req.OpenId, req.Cursor, req.Count), nil, nil)
 	return res, err

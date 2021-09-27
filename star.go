@@ -1,4 +1,4 @@
-package douyinGo
+package douyingo
 
 import (
 	"context"
@@ -6,11 +6,13 @@ import (
 	"github.com/zhangshuai/douyin-go/conf"
 )
 
+// StarHotListReq 抖音星图达人热榜请求
 type StarHotListReq struct {
 	AccessToken string // 调用/oauth/client_token/生成的token，此token不需要用户授权。
 	HotListType int64  // 达人热榜类型 * `1` - 星图指数榜 * `2` - 涨粉指数榜 * `3` - 性价比指数榜 * `4` - 种草指数榜 * `5` - 精选指数榜 * `6` - 传播指数榜
 }
 
+// StarHotList 抖音星图达人热榜
 type StarHotList struct {
 	Follower int64    `json:"follower"`  // 粉丝数
 	NickName string   `json:"nick_name"` // 达人昵称
@@ -20,6 +22,7 @@ type StarHotList struct {
 	UniqueId string   `json:"unique_id"` // 抖音号
 }
 
+// StarHotListData 抖音星图达人热榜
 type StarHotListData struct {
 	HotListType            int64         `json:"hot_list_type"`             // 刷新时间
 	HotListUpdateTimestamp int64         `json:"hot_list_update_timestamp"` // 达人热榜更新时间戳
@@ -28,22 +31,25 @@ type StarHotListData struct {
 	DYError
 }
 
+// StarHotListRes 抖音星图达人热榜
 type StarHotListRes struct {
 	Data  StarHotListData `json:"data"`
 	Extra DYExtra         `json:"extra"`
 }
 
-// 获取抖音星图达人热榜
+// StarHotList 获取抖音星图达人热榜
 func (m *Manager) StarHotList(req StarHotListReq) (res StarHotListRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&hot_list_type=%d", conf.API_STAR_HOT_LIST, req.AccessToken, req.HotListType), nil, nil)
 	return res, err
 }
 
+// StarAuthorScoreReq 抖音星图达人指数请求
 type StarAuthorScoreReq struct {
 	AccessToken string // 调用/oauth/client_token/生成的token，此token不需要用户授权。
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 }
 
+// StarAuthorScoreData 抖音星图达人指数
 type StarAuthorScoreData struct {
 	ShopScore        float64 `json:"shop_score"`         // 种草指数
 	StarScore        float64 `json:"star_score"`         // 星图指数
@@ -58,28 +64,31 @@ type StarAuthorScoreData struct {
 	DYError
 }
 
+// StarAuthorScoreRes 抖音星图达人指数
 type StarAuthorScoreRes struct {
 	Data  StarAuthorScoreData `json:"data"`
 	Extra DYExtra             `json:"extra"`
 }
 
-// 获取抖音星图达人指数
+// StarAuthorScore 获取抖音星图达人指数
 func (m *Manager) StarAuthorScore(req StarAuthorScoreReq) (res StarAuthorScoreRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s", conf.API_STAR_AUTHOR_SCORE, req.AccessToken, req.OpenId), nil, nil)
 	return res, err
 }
 
+// StarAuthorScoreV2Req 抖音星图达人指数数据V2
 type StarAuthorScoreV2Req struct {
 	AccessToken string // 调用/oauth/client_token/生成的token，此token不需要用户授权。
 	UniqueId    string // 达人抖音号
 }
 
+// StarAuthorScoreV2Res 抖音星图达人指数数据V2
 type StarAuthorScoreV2Res struct {
 	Data  StarAuthorScoreData `json:"data"`
 	Extra DYExtra             `json:"extra"`
 }
 
-// 获取抖音星图达人指数数据V2
+// StarAuthorScoreV2 获取抖音星图达人指数数据V2
 func (m *Manager) StarAuthorScoreV2(req StarAuthorScoreV2Req) (res StarAuthorScoreV2Res, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&unique_id=%s", conf.API_STAR_AUTHOR_SCORE_V2, req.AccessToken, req.UniqueId), nil, nil)
 	return res, err
