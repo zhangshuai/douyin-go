@@ -41,7 +41,7 @@ type OauthAccessTokenRes struct {
 	Message string                  `json:"message"`
 }
 
-// 获取access_token
+// OauthAccessToken 获取access_token
 func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessTokenRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=authorization_code&client_key=%s&client_secret=%s&code=%s", conf.API_OAUTH_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret, req.Code), nil, nil)
 	return res, err

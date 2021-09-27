@@ -30,7 +30,7 @@ type VideoListReq struct {
 	Count       int64  // 每页数量
 }
 
-// Video 视频列表
+// Statistics 视频列表
 type Statistics struct {
 	ShareCount    int `json:"share_count"`    // 分享数
 	CommentCount  int `json:"comment_count"`  // 评论数
@@ -87,7 +87,7 @@ type VideoUploadResVideo struct {
 	VideoId string `json:"video_id"` // 视频id
 }
 
-// VideoUploadRes 上传视频到文件服务器
+// VideoUploadResData 上传视频到文件服务器
 type VideoUploadResData struct {
 	Video VideoUploadResVideo `json:"video,omitempty"`
 	DYError
@@ -136,7 +136,7 @@ func (m *Manager) VideoUpload(req VideoUploadReq) (res *VideoUploadRes, err erro
 	return res, err
 }
 
-// VideoCreateBody 创建抖音视频请求
+// VideoCreateReq 创建抖音视频请求
 type VideoCreateReq struct {
 	OpenId      string          // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string          // 调用/oauth/access_token/生成的token，此token需要用户授权。
