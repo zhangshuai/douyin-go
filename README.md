@@ -410,7 +410,7 @@ rs, err := manager.EventStatusUpdate(douyinGo.EventStatusUpdateReq{
 // 如果使用 github.com/gin-gonic/gin 获取 body和signature进行验证
 body, _ := c.GetRawData()
 signature := c.GetHeader("X-Douyin-Signature")
-manager.WebHookSignature(body, signature)
+manager.WebhookSignature(body, signature)
 ```
 
 **获取jsapi_ticket** `/js/getticket/`
