@@ -160,6 +160,12 @@ const (
 	// API_JS_TICKET 获取jsapi_ticket
 	API_JS_TICKET = "/js/getticket/"
 
+	// API_OPEN_TICKET 获取open_ticket
+	API_OPEN_TICKET = "/open/getticket/"
+
+	// API_SHARE_SCHEMA 生成分享Schema
+	API_SHARE_SCHEMA = "snssdk1128://openplatform/share"
+
 	// API_DISCOVERY_ENT_RANK_ITEM 获取抖音电影榜、抖音电视剧榜、抖音综艺榜
 	API_DISCOVERY_ENT_RANK_ITEM = "/discovery/ent/rank/item/"
 
@@ -285,4 +291,7 @@ const (
 
 	// API_POI_SEARCH_KEYWORD 查询POI信息
 	API_POI_SEARCH_KEYWORD = "/poi/search/keyword/"
+
+	// API_MARKET_SERVICE_USER_PERCHASE_LIST 查询用户的服务购买信息
+	API_MARKET_SERVICE_USER_PERCHASE_LIST = "/market/service/user/purchase/list/"
 )
