@@ -145,21 +145,22 @@ type VideoCreateReq struct {
 
 // VideoCreateBody 创建抖音视频
 type VideoCreateBody struct {
-	TimelinessLabel   int64    `json:"timeliness_label,omitempty"`   // 时效新闻标签，1表示使用。暂不开放
-	ArticlId          string   `json:"article_id,omitempty"`         // 文章ID，暂不开放
-	MicroAppId        string   `json:"micro_app_id,omitempty"`       // 小程序id
-	PoiId             string   `json:"poi_id,omitempty"`             // 地理位置id
-	MicroAppUrl       string   `json:"micro_app_url,omitempty"`      // 吊起小程序时的参数
-	ArticleTitle      string   `json:"article_title,omitempty"`      // 文章自定义标题，暂不开放
-	CoverTsp          float64  `json:"cover_tsp,omitempty"`          // 将传入的指定时间点对应帧设置为视频封面（单位：秒）
-	GameId            string   `json:"game_id,omitempty"`            // 游戏id。暂不开放
-	MicroAppTitle     string   `json:"micro_app_title,omitempty"`    // 小程序标题
-	PoiName           string   `json:"poi_name,omitempty"`           // 地理位置名称
-	TimelinessKeyword string   `json:"timeliness_keyword,omitempty"` // 最多可添加3个，用`\|`隔开。暂不开放
-	VideoId           string   `json:"video_id"`                     // video_id, 通过/video/upload/接口得到。注意每次调用/video/create/都要调用/video/upload/生成新的video_id。
-	AtUsers           []string `json:"at_users,omitempty"`           // 如果需要at其他用户。将text中@nickname对应的open_id放到这里。
-	GameContent       string   `json:"game_content,omitempty"`       // 游戏个性化参数
-	Text              string   `json:"text,omitempty"`               // 视频标题， 可以带话题,@用户。 如title1#话题1 #话题2 @openid1 注意： 1. 话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
+	TimelinessLabel   int64    `json:"timeliness_label,omitempty"`       // 时效新闻标签，1表示使用。暂不开放
+	ArticlId          string   `json:"article_id,omitempty"`             // 文章ID，暂不开放
+	MicroAppId        string   `json:"micro_app_id,omitempty"`           // 小程序id
+	PoiId             string   `json:"poi_id,omitempty"`                 // 地理位置id
+	MicroAppUrl       string   `json:"micro_app_url,omitempty"`          // 吊起小程序时的参数
+	ArticleTitle      string   `json:"article_title,omitempty"`          // 文章自定义标题，暂不开放
+	CoverTsp          float64  `json:"cover_tsp,omitempty"`              // 将传入的指定时间点对应帧设置为视频封面（单位：秒）
+	GameId            string   `json:"game_id,omitempty"`                // 游戏id。暂不开放
+	MicroAppTitle     string   `json:"micro_app_title,omitempty"`        // 小程序标题
+	PoiName           string   `json:"poi_name,omitempty"`               // 地理位置名称
+	TimelinessKeyword string   `json:"timeliness_keyword,omitempty"`     // 最多可添加3个，用`\|`隔开。暂不开放
+	VideoId           string   `json:"video_id"`                         // video_id, 通过/video/upload/接口得到。注意每次调用/video/create/都要调用/video/upload/生成新的video_id。
+	AtUsers           []string `json:"at_users,omitempty"`               // 如果需要at其他用户。将text中@nickname对应的open_id放到这里。
+	GameContent       string   `json:"game_content,omitempty"`           // 游戏个性化参数
+	Text              string   `json:"text,omitempty"`                   // 视频标题， 可以带话题,@用户。 如title1#话题1 #话题2 @openid1 注意： 1. 话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
+	CustomCoverImage  string   `json:"custom_cover_image_url,omitempty"` // 自定义封面图片,参数为接口/image/upload/ 返回的image_id
 }
 
 // VideoCreateResData 创建抖音视频
