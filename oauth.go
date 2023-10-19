@@ -26,12 +26,13 @@ type OauthAccessTokenReq struct {
 
 // OauthAccessTokenResData access_token
 type OauthAccessTokenResData struct {
-	AccessToken  string `json:"access_token"`  // 接口调用凭证
-	UnionId      string `json:"union_id"`      // 当且仅当该网站应用已获得该用户的userinfo授权时，才会出现该字段。
-	Scope        string `json:"scope"`         // 用户授权的作用域(Scope)，使用逗号（,）分隔，开放平台几乎几乎每个接口都需要特定的Scope。
-	ExpiresIn    uint64 `json:"expires_in"`    // access_token接口调用凭证超时时间，单位（秒）
-	OpenId       string `json:"open_id"`       // 授权用户唯一标识
-	RefreshToken string `json:"refresh_token"` // 用户刷新access_token
+	AccessToken      string `json:"access_token"`       // 接口调用凭证
+	UnionId          string `json:"union_id"`           // 当且仅当该网站应用已获得该用户的userinfo授权时，才会出现该字段。
+	Scope            string `json:"scope"`              // 用户授权的作用域(Scope)，使用逗号（,）分隔，开放平台几乎几乎每个接口都需要特定的Scope。
+	ExpiresIn        uint64 `json:"expires_in"`         // access_token接口调用凭证超时时间，单位（秒）
+	OpenId           string `json:"open_id"`            // 授权用户唯一标识
+	RefreshToken     string `json:"refresh_token"`      // 用户刷新access_token
+	RefreshExpiresIn uint64 `json:"refresh_expires_in"` // refresh_token 凭证超时时间，单位（秒)
 	DYError
 }
 
@@ -73,11 +74,12 @@ type OauthRefreshTokenReq struct {
 
 // OauthRefreshTokenResData 刷新access_token
 type OauthRefreshTokenResData struct {
-	AccessToken  string `json:"access_token"`  // 接口调用凭证
-	Scope        string `json:"scope"`         // 用户授权的作用域
-	ExpiresIn    uint64 `json:"expires_in"`    // 过期时间，单位（秒）
-	OpenId       string `json:"open_id"`       // 当前应用下，授权用户唯一标识
-	RefreshToken string `json:"refresh_token"` // 用户刷新
+	AccessToken      string `json:"access_token"`       // 接口调用凭证
+	Scope            string `json:"scope"`              // 用户授权的作用域
+	ExpiresIn        uint64 `json:"expires_in"`         // 过期时间，单位（秒）
+	OpenId           string `json:"open_id"`            // 当前应用下，授权用户唯一标识
+	RefreshToken     string `json:"refresh_token"`      // 用户刷新
+	RefreshExpiresIn uint64 `json:"refresh_expires_in"` // refresh_token 凭证超时时间，单位（秒)
 	DYError
 }
 

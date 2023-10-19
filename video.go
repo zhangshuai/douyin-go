@@ -50,7 +50,9 @@ type Video struct {
 	IsTop       bool       `json:"is_top"`       // 是否置顶
 	ItemId      string     `json:"item_id"`      // 视频id
 	ShareUrl    string     `json:"share_url"`    // 视频播放页面。视频播放页可能会失效，请在观看视频前调用/video/data/获取最新的播放页。
-	VideoStatus int        `json:"video_status"` // 表示视频状态。1:已发布;2:不适宜公开;4:审核中
+	VideoStatus int        `json:"video_status"` // 表示视频状态。1:已发布;2:不适宜公开;4:审核中;5:公开视频
+	MediaType   int        `json:"media_type"`   // 媒体类型。2:图集;4:视频
+	VideoId     string     `json:"video_id"`     // 视频真实 ID
 }
 
 // VideoListResData 视频列表
@@ -145,21 +147,16 @@ type VideoCreateReq struct {
 
 // VideoCreateBody 创建抖音视频
 type VideoCreateBody struct {
-	TimelinessLabel   int64    `json:"timeliness_label,omitempty"`   // 时效新闻标签，1表示使用。暂不开放
-	ArticlId          string   `json:"article_id,omitempty"`         // 文章ID，暂不开放
-	MicroAppId        string   `json:"micro_app_id,omitempty"`       // 小程序id
-	PoiId             string   `json:"poi_id,omitempty"`             // 地理位置id
-	MicroAppUrl       string   `json:"micro_app_url,omitempty"`      // 吊起小程序时的参数
-	ArticleTitle      string   `json:"article_title,omitempty"`      // 文章自定义标题，暂不开放
-	CoverTsp          float64  `json:"cover_tsp,omitempty"`          // 将传入的指定时间点对应帧设置为视频封面（单位：秒）
-	GameId            string   `json:"game_id,omitempty"`            // 游戏id。暂不开放
-	MicroAppTitle     string   `json:"micro_app_title,omitempty"`    // 小程序标题
-	PoiName           string   `json:"poi_name,omitempty"`           // 地理位置名称
-	TimelinessKeyword string   `json:"timeliness_keyword,omitempty"` // 最多可添加3个，用`\|`隔开。暂不开放
-	VideoId           string   `json:"video_id"`                     // video_id, 通过/video/upload/接口得到。注意每次调用/video/create/都要调用/video/upload/生成新的video_id。
-	AtUsers           []string `json:"at_users,omitempty"`           // 如果需要at其他用户。将text中@nickname对应的open_id放到这里。
-	GameContent       string   `json:"game_content,omitempty"`       // 游戏个性化参数
-	Text              string   `json:"text,omitempty"`               // 视频标题， 可以带话题,@用户。 如title1#话题1 #话题2 @openid1 注意： 1. 话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
+	VideoId             string   `json:"video_id"`                         // 必须上传加密的 video_id。加密的 video_id 通过调用 /video/upload 接口可以得到。
+	Text                string   `json:"text,omitempty"`                   // 视频标题。可以带话题，@用户。注意：话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
+	AtUsers             []string `json:"at_users,omitempty"`               // 如果需要 at 其他用户。将 text 中 @nickname 对应的 open_id 放到这里。
+	MicroAppTitle       string   `json:"micro_app_title,omitempty"`        // 小程序标题
+	MicroAppUrl         string   `json:"micro_app_url,omitempty"`          // 开发者在小程序中生成该页面时写的 path 地址
+	MicroAppId          string   `json:"micro_app_id,omitempty"`           // 小程序 id
+	PoiId               string   `json:"poi_id,omitempty"`                 // 地理位置 id，poi_id 可通过"查询视频携带的地点信息"能力获取
+	CoverTsp            float64  `json:"cover_tsp,omitempty"`              // 将传入的指定时间点对应帧设置为视频封面（单位：秒）
+	PoiCommerce         bool     `json:"poi_commerce,omitempty"`           // 为 true 时，如果用户拥有门店推广能力，则用户发布视频所添加的地理位置默认开启门店推广
+	CustomCoverImageUrl string   `json:"custom_cover_image_url,omitempty"` // 自定义封面图片，参数为图片上传接口返回的 image_id
 }
 
 // VideoCreateResData 创建抖音视频
@@ -218,7 +215,8 @@ type VideoDataReq struct {
 
 // VideoDataBody 视频数据
 type VideoDataBody struct {
-	ItemIds []string `json:"item_ids"` // item_id数组，仅能查询access_token对应用户上传的视频
+	ItemIds  []string `json:"item_ids,omitempty"`  // item_id 数组，仅能查询 access_token 对应用户上传的视频（与video_ids字段二选一，平台优先处理item_ids）
+	VideoIds []string `json:"video_ids,omitempty"` // video_id 数组，仅能查询 access_token 对应用户上传的视频（与item_ids字段二选一，平台优先处理item_ids）
 }
 
 // VideoDataResData 视频数据
@@ -247,7 +245,7 @@ type VideoPartUploadInitReq struct {
 
 // VideoPartUploadInitResData 初始化分片上传
 type VideoPartUploadInitResData struct {
-	UploadId string `json:"upload_id"` // 上传id
+	UploadId string `json:"upload_id,omitempty"` // 上传id
 	DYError
 }
 
@@ -353,22 +351,66 @@ func (m *Manager) VideoPartUpload(req VideoPartUploadReq) (res *VideoPartUploadR
 	return res, err
 }
 
-// VideoUploadPartCompleteReq 上传视频请求
+// VideoUploadPartCompleteReq 分片上传视频请求
 type VideoUploadPartCompleteReq struct {
 	OpenId      string // 通过/oauth/access_token/获取，用户唯一标志
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	UploadId    string // 分片上传的标记。有限时间为2小时。
 }
 
-// VideoUploadPartCompleteRes 上传视频
+// VideoUploadPartCompleteRes 分片上传视频
 type VideoUploadPartCompleteRes struct {
 	Data  VideoUploadResData `json:"data"`
 	Extra DYExtra            `json:"extra"`
 }
 
-// VideoUploadPartComplete 完成上传视频
+// VideoUploadPartComplete 完成分片上传视频
 func (m *Manager) VideoUploadPartComplete(req VideoUploadPartCompleteReq) (res VideoUploadPartCompleteRes, err error) {
 	uploadId := url.QueryEscape(req.UploadId)
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s&upload_id=%s", conf.API_VIDEO_UPLOAD_PART_COMPLETE, req.AccessToken, req.OpenId, uploadId), nil, nil)
+	return res, err
+}
+
+// VideoGetIframeData 获取IFrame代码响应数据
+type VideoGetIframeData struct {
+	IframeCode  string `json:"iframe_code"`  // 返回IFrame代码片段，用于直接注入页面
+	VideoTitle  string `json:"video_title"`  // 视频标题
+	VideoWidth  int64  `json:"video_width"`  // 视频宽度
+	VideoHeight int64  `json:"video_height"` // 视频高度
+}
+
+// VideoGetIframeByVideoReq 通过VideoID获取IFrame代码
+type VideoGetIframeByVideoReq struct {
+	VideoId string // 视频VideoID
+}
+
+// VideoGetIframeByVideoReq 通过VideoID获取IFrame代码响应
+type VideoGetIframeByVideoRes struct {
+	Data VideoGetIframeData `json:"data"`
+	DYExtraV1
+}
+
+// VideoGetIframeByVideo 通过VideoID获取IFrame代码
+func (m *Manager) VideoGetIframeByVideo(req VideoGetIframeByVideoReq) (res VideoGetIframeByVideoRes, err error) {
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?video_id=%s", conf.API_VIDEO_GET_IFRAME_BY_VIDEO, req.VideoId), nil, nil)
+	return res, err
+}
+
+// VideoGetIframeByItemReq 通过ItemID获取IFrame代码
+type VideoGetIframeByItemReq struct {
+	ClientKey string // 应用标识
+	ItemId    string // 视频ItemID
+}
+
+// VideoGetIframeByItemReq 通过ItemID获取IFrame代码响应
+type VideoGetIframeByItemRes struct {
+	Data VideoGetIframeData `json:"data"`
+	DYExtraV1
+}
+
+// VideoGetIframeByItem 通过ItemID获取IFrame代码
+func (m *Manager) VideoGetIframeByItem(req VideoGetIframeByItemReq) (res VideoGetIframeByItemRes, err error) {
+	// itemID需要Base64URL编码
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?client_key=%s&item_id=%s", conf.API_VIDEO_GET_IFRAME_BY_ITEM, req.ClientKey, req.ItemId), nil, nil)
 	return res, err
 }

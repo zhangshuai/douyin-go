@@ -15,7 +15,7 @@ type StarHotListReq struct {
 // StarHotList 抖音星图达人热榜
 type StarHotList struct {
 	Follower int64    `json:"follower"`  // 粉丝数
-	NickName string   `json:"nick_name"` // 达人昵称
+	Nickname string   `json:"nick_name"` // 达人昵称
 	Rank     int64    `json:"rank"`      // 热榜排名
 	Score    float64  `json:"score"`     // 热榜类型对应的热榜指数
 	Tags     []string `json:"tags"`      // 标签
@@ -57,7 +57,7 @@ type StarAuthorScoreData struct {
 	UpdateTimestamp  int64   `json:"update_timestamp"`   // 达人指数更新时间戳
 	CooperationScore float64 `json:"cooperation_score"`  // 合作指数
 	CpScore          float64 `json:"cp_score"`           // 性价比指数
-	NickName         string  `json:"nick_name"`          // 达人昵称
+	Nickname         string  `json:"nick_name"`          // 达人昵称
 	GrowthScore      float64 `json:"growth_score"`       // 涨粉指数
 	SpreadScore      float64 `json:"spread_score"`       // 传播指数
 	Follower         int64   `json:"follower,omitempty"` // 粉丝数

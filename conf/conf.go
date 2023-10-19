@@ -26,28 +26,28 @@ const (
 	API_OAUTH_CLIENT_ACCESS_TOKEN = "/oauth/client_token/"
 
 	// API_VIDEO_LIST 查询授权账号视频数据
-	API_VIDEO_LIST = "/video/list/"
+	API_VIDEO_LIST = "/api/douyin/v1/video/video_list/"
 
 	// API_VIDEO_UPLOAD 上传视频到文件服务器
-	API_VIDEO_UPLOAD = "/video/upload/"
-
-	// API_VIDEO_UPLOAD_PART_INIT 初始化分片上传
-	API_VIDEO_UPLOAD_PART_INIT = "/video/part/init/"
-
-	// API_VIDEO_UPLOAD_PART_UPLOAD 上传视频分片到文件服务器
-	API_VIDEO_UPLOAD_PART_UPLOAD = "/video/part/upload/"
-
-	// API_VIDEO_UPLOAD_PART_COMPLETE 完成上传视频
-	API_VIDEO_UPLOAD_PART_COMPLETE = "/video/part/complete/"
+	API_VIDEO_UPLOAD = "/api/douyin/v1/video/upload_video/"
 
 	// API_VIDEO_CREATE 创建抖音视频
-	API_VIDEO_CREATE = "/video/create/"
+	API_VIDEO_CREATE = "/api/douyin/v1/video/create_video/"
+
+	// API_VIDEO_UPLOAD_PART_INIT 初始化分片上传
+	API_VIDEO_UPLOAD_PART_INIT = "/api/douyin/v1/video/init_video_part_upload/"
+
+	// API_VIDEO_UPLOAD_PART_UPLOAD 上传视频分片到文件服务器
+	API_VIDEO_UPLOAD_PART_UPLOAD = "/api/douyin/v1/video/upload_video_part/"
+
+	// API_VIDEO_UPLOAD_PART_COMPLETE 完成上传视频
+	API_VIDEO_UPLOAD_PART_COMPLETE = "/api/douyin/v1/video/complete_video_part_upload/"
 
 	// API_VIDEO_DELETE  删除授权用户发布的视频
 	API_VIDEO_DELETE = "/video/delete/"
 
 	// API_VIDEO_DATA 查询指定视频数据
-	API_VIDEO_DATA = "/video/data/"
+	API_VIDEO_DATA = "/api/douyin/v1/video/video_data/"
 
 	// API_VIDEO_SEARCH 关键词视频搜索
 	API_VIDEO_SEARCH = "/video/search/"
@@ -61,11 +61,17 @@ const (
 	// API_VIDEO_SEARCH_COMMENT_REPLY 关键词视频评论回复
 	API_VIDEO_SEARCH_COMMENT_REPLY = "/video/search/comment/reply/"
 
+	// API_VIDEO_GET_IFRAME_BY_VIDEO 通过VideoID获取IFrame代码
+	API_VIDEO_GET_IFRAME_BY_VIDEO = "/api/douyin/v1/video/get_iframe_by_video/"
+
+	// API_VIDEO_GET_IFRAME_BY_ITEM 通过ItemID获取IFrame代码
+	API_VIDEO_GET_IFRAME_BY_ITEM = "/api/douyin/v1/video/get_iframe_by_item/"
+
 	// API_IMAGE_UPLOAD 上传图片到文件服务器
-	API_IMAGE_UPLOAD = "/image/upload/"
+	API_IMAGE_UPLOAD = "/api/douyin/v1/video/upload_image/"
 
 	// API_IMAGE_CREATE 发布图片
-	API_IMAGE_CREATE = "/image/create/"
+	API_IMAGE_CREATE = "/api/douyin/v1/video/create_image_text/"
 
 	// API_AWEME_SHARE 获取share-id
 	API_AWEME_SHARE = "/share-id/"
@@ -116,10 +122,13 @@ const (
 	API_FANS_LIST = "/fans/list/"
 
 	// API_FANS_DATA 获取用户粉丝数据
-	API_FANS_DATA = "/fans/data/"
+	API_FANS_DATA = "/api/douyin/v1/user/fans_data/"
 
 	// API_FANS_CHECK 获取粉丝判断
 	API_FANS_CHECK = "/fans/check/"
+
+	// API_ROLE_CHECK 用户经营身份管理
+	API_ROLE_CHECK = "/api/douyin/v1/role/check/"
 
 	// API_DATA_EXTERNAL_FANS_SOURCE 获取用户粉丝来源分布
 	API_DATA_EXTERNAL_FANS_SOURCE = "/data/extern/fans/source/"
@@ -141,6 +150,9 @@ const (
 
 	// API_ITEM_COMMENT_REPLY 回复视频评论
 	API_ITEM_COMMENT_REPLY = "/item/comment/reply/"
+
+	// API_ITEM_COMMENT_TOP 置顶评论
+	API_ITEM_COMMENT_TOP = "/item/comment/top/"
 
 	// API_EVENT_STATUS_LIST 获取事件订阅状态
 	API_EVENT_STATUS_LIST = "/event/status/list/"
@@ -294,4 +306,19 @@ const (
 
 	// API_MARKET_SERVICE_USER_PERCHASE_LIST 查询用户的服务购买信息
 	API_MARKET_SERVICE_USER_PERCHASE_LIST = "/market/service/user/purchase/list/"
+
+	// API_SCHEMA_GET_SHARE H5分享跳转链接获取
+	API_SCHEMA_GET_SHARE = "/api/douyin/v1/schema/get_share/"
+
+	// API_SCHEMA_GET_USER_PROFILE 个人页跳转链接获取
+	API_SCHEMA_GET_USER_PROFILE = "/api/douyin/v1/schema/get_user_profile/"
+
+	// API_SCHEMA_GET_CHAT 个人会话页跳转链接获取
+	API_SCHEMA_GET_CHAT = "/api/douyin/v1/schema/get_chat/"
+
+	// API_SCHEMA_GET_ITEM_INFO 视频详情页跳转链接获取
+	API_SCHEMA_GET_ITEM_INFO = "/api/douyin/v1/schema/get_item_info/"
+
+	// API_SCHEMA_GET_LIVE 直播间跳转链接获取
+	API_SCHEMA_GET_LIVE = "/api/douyin/v1/schema/get_live/"
 )

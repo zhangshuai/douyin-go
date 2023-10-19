@@ -82,7 +82,7 @@ list, err := manager.FollowingList(douyinGo.FollowingListReq{
 })
 ```
 
-**上传视频到文件服务器** `/video/upload/`
+**上传视频到文件服务器** `/api/douyin/v1/video/upload_video/`
 ```go
 rs, err := manager.VideoUpload(douyinGo.VideoUploadReq{
     AccessToken: "ACCESS_TOKEN",
@@ -91,7 +91,7 @@ rs, err := manager.VideoUpload(douyinGo.VideoUploadReq{
 })
 ```
 
-**分片初始化上传** `/video/part/init/`
+**分片初始化上传** `/api/douyin/v1/video/init_video_part_upload/`
 ```go
 rs, err := manager.VideoPartUploadInit(douyinGo.VideoPartUploadInitReq{
     AccessToken: "ACCESS_TOKEN",
@@ -99,7 +99,7 @@ rs, err := manager.VideoPartUploadInit(douyinGo.VideoPartUploadInitReq{
 })
 ```
 
-**分片上传视频** `/video/part/upload/`
+**分片上传视频** `/api/douyin/v1/video/upload_video_part/`
 ```go
 rs, err := manager.VideoPartUpload(douyinGo.VideoPartUploadReq{
     AccessToken: "ACCESS_TOKEN",
@@ -111,7 +111,7 @@ rs, err := manager.VideoPartUpload(douyinGo.VideoPartUploadReq{
 })
 ```
 
-**分片完成上传** `/video/part/complete/`
+**分片完成上传** `/api/douyin/v1/video/complete_video_part_upload/`
 ```go
 rs, err := manager.VideoUploadPartComplete(douyinGo.VideoUploadPartCompleteReq{
     AccessToken: "ACCESS_TOKEN",
@@ -120,7 +120,7 @@ rs, err := manager.VideoUploadPartComplete(douyinGo.VideoUploadPartCompleteReq{
 })
 ```
 
-**创建抖音视频** `/video/create/`
+**创建抖音视频** `/api/douyin/v1/video/create_video/`
 ```go
 rs, err := manager.VideoCreate(douyinGo.VideoCreateReq{
     AccessToken: "ACCESS_TOKEN",
@@ -143,7 +143,7 @@ rs, err := manager.VideoDelete(douyinGo.VideoDeleteReq{
 })
 ```
 
-**上传图片到文件服务器** `/image/upload/`
+**上传图片到文件服务器** `/api/douyin/v1/video/upload_image/`
 ```go
 rs, err := manager.ImageUpload(douyinGo.ImageUploadReq{
     AccessToken: "ACCESS_TOKEN",
@@ -152,13 +152,13 @@ rs, err := manager.ImageUpload(douyinGo.ImageUploadReq{
 })
 ```
 
-**发布图片** `/image/create/`
+**发布图片** `/api/douyin/v1/video/create_image_text/`
 ```go
 rs, err := manager.ImageCreate(douyinGo.ImageCreateReq{
     AccessToken: "ACCESS_TOKEN",
     OpenId:      "OPEN_ID",
     Body: douyinGo.ImageCreateBody{
-        ImageId: "IMAGE_ID",
+        ImageList: []string{"IMAGE_ID"},
         Text:    "TITLE",
     },
 })
@@ -225,6 +225,19 @@ rs, err := manager.ItemCommentReply(douyinGo.ItemCommentReplyReq{
         CommentId: "COMMENT_ID",
         ItemId:    "VIDEO_ID",
         Content:   "CONTENT",
+    },
+})
+```
+
+**置顶视频评论** `/item/comment/top/`
+```go
+rs, err := manager.ItemCommentTop(douyinGo.ItemCommentTopReq{
+    AccessToken: "ACCESS_TOKEN",
+    OpenId:      "OPEN_ID",
+    Body: douyinGo.ItemCommentTopBody{
+        CommentId: "COMMENT_ID",
+        ItemId:    "VIDEO_ID",
+        Top:       true,
     },
 })
 ```
@@ -430,7 +443,7 @@ signature := manager.JsConfigSignature(douyinGo.ConfigSignReq{
 })
 ```
 
-**获取用户粉丝数据** `/fans/data/`
+**获取用户粉丝数据** `/api/douyin/v1/user/fans_data/`
 ```go
 rs, err := manager.FansData(douyinGo.FansDataReq{
     AccessToken: "ACCESS_TOKEN",
@@ -579,5 +592,93 @@ rs, err := manager.FansCheck(douyinGo.FansCheckReq{
     AccessToken:    "ACCESS_TOKEN",
     OpenId:         "OPEN_ID",
     FollowerOpenId: "FOLLOWER_OPEN_ID",
+})
+```
+
+**用户经营身份管理** `/api/douyin/v1/role/check/`
+```go
+rs, err := manager.FansCheck(douyinGo.FansCheckReq{
+    AccessToken:    "CLIENT_TOKEN",
+    OpenId:         "OPEN_ID",
+    DouyinShortId:  "DOUYIN_SHORTID",
+    RoleLabels:     "ROLE_LABELS",
+})
+```
+
+**通过VideoID获取IFrame代码** `/api/douyin/v1/video/get_iframe_by_video/`
+```go
+rs, err := manager.VideoGetIframeByVideo(douyinGo.VideoGetIframeByVideoReq{
+    VideoId:    "VIDEO_ID",
+})
+```
+
+**通过ItemID获取IFrame代码** `/api/douyin/v1/video/get_iframe_by_item/`
+```go
+rs, err := manager.VideoGetIframeByItem(douyinGo.VideoGetIframeByItemReq{
+    ClientKey: "CLIENT_KEY",
+    ItemId:    "ITEM_ID",
+})
+```
+
+**获取open_ticket** `/open/getticket/`
+```go
+rs, err := manager.OpenTicket(douyinGo.OpenTicketReq{
+    AccessToken: "CLIENT_TOKEN",
+})
+```
+
+**H5分享跳转链接获取** `/api/douyin/v1/schema/get_share/`
+```go
+rs, err := manager.SchemaGetShare(douyinGo.SchemaGetShareReq{
+    AccessToken: "CLIENT_TOKEN",
+    Body: douyinGo.SchemaGetShareBody{
+        ClientTicket: "OPEN_TICKET",
+        ExpireAt:     "EXPIRE_AT",
+        VideoPath:    "VIDEO_PATH",
+    },
+})
+```
+
+**个人页跳转链接获取** `/api/douyin/v1/schema/get_user_profile/`
+```go
+rs, err := manager.SchemaGetUserProfile(douyinGo.SchemaGetUserProfileReq{
+    AccessToken: "CLIENT_TOKEN",
+    Body: douyinGo.SchemaGetUserProfileBody{
+        ExpireAt:     "EXPIRE_AT",
+        OpenId:       "OPEN_ID",
+    },
+})
+```
+
+**个人会话页跳转链接获取** `/api/douyin/v1/schema/get_chat/`
+```go
+rs, err := manager.SchemaGetChat(douyinGo.SchemaGetChatReq{
+    AccessToken: "CLIENT_TOKEN",
+    Body: douyinGo.SchemaGetChatBody{
+        ExpireAt:     "EXPIRE_AT",
+        OpenId:       "OPEN_ID",
+    },
+})
+```
+
+**视频详情页跳转链接获取** `/api/douyin/v1/schema/get_item_info/`
+```go
+rs, err := manager.SchemaGetItemInfo(douyinGo.SchemaGetItemInfoReq{
+    AccessToken: "CLIENT_TOKEN",
+    Body: douyinGo.SchemaGetItemInfoBody{
+        ExpireAt:     "EXPIRE_AT",
+        ItemId:       "ITEM_ID",
+    },
+})
+```
+
+**直播间跳转链接获取** `/api/douyin/v1/schema/get_live/`
+```go
+rs, err := manager.SchemaGetLive(douyinGo.SchemaGetLiveReq{
+    AccessToken: "CLIENT_TOKEN",
+    Body: douyinGo.SchemaGetLiveBody{
+        ExpireAt:     "EXPIRE_AT",
+        OpenId:       "OPEN_ID",
+    },
 })
 ```

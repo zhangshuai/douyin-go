@@ -2,6 +2,7 @@ package douyingo
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/zhangshuai/douyin-go/conf"
 )
@@ -17,18 +18,18 @@ type VideoSearchReq struct {
 
 // VideoSearchResult 关键词视频搜索
 type VideoSearchResult struct {
-	Cover      string     `json:"cover"`       // 视频封面
+	SecItemId  string     `json:"sec_item_id"` // 特殊加密的视频id通过用户视频搜索的评论接口获取到
+	ItemId     string     `json:"item_id"`     // 视频id
+	CreateTime int64      `json:"create_time"` // 视频创建时间戳
+	ShareUrl   string     `json:"share_url"`   // 视频播放页面。视频播放页可能会失效，请在观看视频前调用/video/data/获取最新的播放页。
 	Statistics Statistics `json:"statistics"`  // 统计数据
 	Title      string     `json:"title"`       // 视频标题
-	CreateTime int64      `json:"create_time"` // 视频创建时间戳
-	IsReviewed bool       `json:"is_reviewed"` // 表示是否审核结束。审核通过或者失败都会返回true，审核中返回false。
+	Cover      string     `json:"cover"`       // 视频封面
 	IsTop      bool       `json:"is_top"`      // 是否置顶
-	ItemId     string     `json:"item_id"`     // 视频id
-	ShareUrl   string     `json:"share_url"`   // 视频播放页面。视频播放页可能会失效，请在观看视频前调用/video/data/获取最新的播放页。
-	Nickname   string     `json:"nickname"`    // 昵称
+	IsReviewed bool       `json:"is_reviewed"` // 表示是否审核结束。审核通过或者失败都会返回true，审核中返回false。
 	OpenId     string     `json:"open_id"`     // 作者openID
 	Avatar     string     `json:"avatar"`      // 头像
-	SecItemId  string     `json:"sec_item_id"` // 特殊加密的视频id通过用户视频搜索的评论接口获取到
+	Nickname   string     `json:"nickname"`    // 昵称
 }
 
 // VideoSearchData 关键词视频搜索
@@ -75,7 +76,8 @@ type VideoSearchCommentListRes struct {
 
 // VideoSearchCommentList 关键词视频评论列表
 func (m *Manager) VideoSearchCommentList(req VideoSearchCommentListReq) (res VideoSearchCommentListRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&cursor=%d&count=%d&sec_item_id=%s", conf.API_VIDEO_SEARCH_COMMENT_LIST, req.AccessToken, req.Cursor, req.Count, req.SecItemId), nil, nil)
+	secItemId := url.QueryEscape(req.SecItemId)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&cursor=%d&count=%d&sec_item_id=%s", conf.API_VIDEO_SEARCH_COMMENT_LIST, req.AccessToken, req.Cursor, req.Count, secItemId), nil, nil)
 	return res, err
 }
 
@@ -104,7 +106,9 @@ type VideoSearchCommentReplyListRes struct {
 
 // VideoSearchCommentReplyList 关键词视频评论回复列表
 func (m *Manager) VideoSearchCommentReplyList(req VideoSearchCommentReplyListReq) (res VideoSearchCommentReplyListRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&cursor=%d&count=%d&sec_item_id=%s&comment_id=%s", conf.API_VIDEO_SEARCH_COMMENT_REPLY_LIST, req.AccessToken, req.Cursor, req.Count, req.SecItemId, req.CommentId), nil, nil)
+	secItemId := url.QueryEscape(req.SecItemId)
+	commentId := url.QueryEscape(req.CommentId)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&cursor=%d&count=%d&sec_item_id=%s&comment_id=%s", conf.API_VIDEO_SEARCH_COMMENT_REPLY_LIST, req.AccessToken, req.Cursor, req.Count, secItemId, commentId), nil, nil)
 	return res, err
 }
 

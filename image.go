@@ -87,19 +87,18 @@ type ImageCreateReq struct {
 
 // ImageCreateBody 发布图片
 type ImageCreateBody struct {
-	PoiId         string   `json:"poi_id,omitempty"`          // 地理位置id
-	PoiName       string   `json:"poi_name,omitempty"`        // 地理位置名称
-	Text          string   `json:"text,omitempty"`            // 标题，可以带话题。 如title1#话题1 #话题2 注意：话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
-	MicroAppId    string   `json:"micro_app_id,omitempty"`    // 小程序id
+	ImageList     []string `json:"image_list,omitempty"`      // 通过/image/upload/接口得到。
+	Text          string   `json:"text,omitempty"`            // 视频标题。可以带话题，@用户。 注意：话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为。
+	AtUsers       []string `json:"at_users,omitempty"`        // 如果需要at其他用户。将 text 中 @nickname 对应的 open_id 放到这里。
 	MicroAppTitle string   `json:"micro_app_title,omitempty"` // 小程序标题
-	MicroAppUrl   string   `json:"micro_app_url,omitempty"`   // 吊起小程序时的参数
-	ImageId       string   `json:"image_id"`                  // 通过/image/upload/接口得到。
-	AtUsers       []string `json:"at_users,omitempty"`        // 如果需要at其他用户。将text中@nickname对应的open_id放到这里。
+	MicroAppUrl   string   `json:"micro_app_url,omitempty"`   // 开发者在小程序中生成该页面时写的path地址
+	MicroAppId    string   `json:"micro_app_id,omitempty"`    // 小程序 ID
+	PoiId         string   `json:"poi_id,omitempty"`          // 地理位置 id，poi_id 可通过"查询 POI 信息"能力获取。
 }
 
 // ImageCreateResData 发布图片
 type ImageCreateResData struct {
-	ItemId string `json:"item_id"` // 抖音图片id
+	ItemId string `json:"item_id,omitempty"` // 抖音图片id
 	DYError
 }
 
