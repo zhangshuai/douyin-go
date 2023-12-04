@@ -47,7 +47,8 @@ const (
 	API_VIDEO_DELETE = "/video/delete/"
 
 	// API_VIDEO_DATA 查询指定视频数据
-	API_VIDEO_DATA = "/api/douyin/v1/video/video_data/"
+	// API_VIDEO_DATA = "/api/douyin/v1/video/video_data/"
+	API_VIDEO_DATA = "/api/apps/v1/video/query/"
 
 	// API_VIDEO_SEARCH 关键词视频搜索
 	API_VIDEO_SEARCH = "/video/search/"
