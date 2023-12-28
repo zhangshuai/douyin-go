@@ -91,7 +91,6 @@ func (r Client) DoRequestWithJson(ctx context.Context, method, reqUrl string, he
 	var reqBody []byte
 	if data != nil {
 		reqBody, err = json.Marshal(data)
-		fmt.Println(string(reqBody))
 		if err != nil {
 			return
 		}
@@ -226,6 +225,8 @@ func CallRet(ctx context.Context, ret interface{}, resp *http.Response) (err err
 	}
 	if resp.StatusCode/100 == 2 {
 		if ret != nil && resp.ContentLength != 0 {
+			data, err := ioutil.ReadAll(resp.Body)
+			fmt.Println(string(data))
 			err = json.NewDecoder(resp.Body).Decode(ret)
 			if err != nil {
 				return
