@@ -4,8 +4,9 @@ import "fmt"
 
 // DYError 错误结构体
 type DYError struct {
-	ErrorCode   int64  `json:"error_code,omitempty"`  // 错误码
-	Description string `json:"description,omitempty"` // 错误码描述
+	ErrorCode   int64  `json:"err_no,omitempty"`  // 错误码
+	Description string `json:"err_msg,omitempty"` // 错误码描述
+	LogId       string `json:"log_id,omitempty"`  // 日志ID
 }
 
 func (e *DYError) Error() string {
