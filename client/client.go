@@ -91,6 +91,7 @@ func (r Client) DoRequestWithJson(ctx context.Context, method, reqUrl string, he
 	var reqBody []byte
 	if data != nil {
 		reqBody, err = json.Marshal(data)
+		fmt.Println(string(reqBody))
 		if err != nil {
 			return
 		}
