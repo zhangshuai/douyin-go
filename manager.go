@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/zhangshuai/douyin-go/auth"
-	"github.com/zhangshuai/douyin-go/client"
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/auth"
+	"github.com/guaidashu/douyin-go/client"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // Manager Manager结构体

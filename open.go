@@ -9,7 +9,7 @@ import (
 
 	"encoding/json"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // OpenTicketReq open_ticket请求

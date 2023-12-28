@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // FansListReq 粉丝列表请求

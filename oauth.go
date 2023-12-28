@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // OauthParam 授权参数

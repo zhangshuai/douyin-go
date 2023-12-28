@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // DiscoveryEntRankItemReq 抖音电影榜、抖音电视剧榜、抖音综艺榜请求
