@@ -229,6 +229,7 @@ type VideoDataResData struct {
 type VideoDataRes struct {
 	Data  VideoDataResData `json:"data"`
 	Extra DYExtra          `json:"extra"`
+	DYError
 }
 
 // VideoData 查询指定视频数据

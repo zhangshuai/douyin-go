@@ -225,12 +225,10 @@ func CallRet(ctx context.Context, ret interface{}, resp *http.Response) (err err
 	}
 	if resp.StatusCode/100 == 2 {
 		if ret != nil && resp.ContentLength != 0 {
-			data, _ := ioutil.ReadAll(resp.Body)
-			fmt.Println(string(data))
-			// err = json.NewDecoder(resp.Body).Decode(ret)
-			// if err != nil {
-			// 	return
-			// }
+			err = json.NewDecoder(resp.Body).Decode(ret)
+			if err != nil {
+				return
+			}
 		}
 		if resp.StatusCode == 200 {
 			return nil
