@@ -234,8 +234,7 @@ type VideoDataRes struct {
 // VideoData 查询指定视频数据
 func (m *Manager) VideoData(req VideoDataReq) (res VideoDataRes, err error) {
 	header := http.Header{}
-	header.Set("access-token", req.AccessToken)
-	header.Set("Content-Type", "application/json")
+	header.Add("access-token", req.AccessToken)
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?open_id=%s", conf.API_VIDEO_DATA, req.OpenId), header, req.Body)
 	return res, err
 }
