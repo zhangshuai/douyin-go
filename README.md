@@ -1,16 +1,16 @@
 # Douyin SDK for Go
 
-[![Build](https://img.shields.io/badge/github-passing-green?style=flat&logo=github)](https://github.com/guaidashu/douyin-go/actions/workflows/go.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/guaidashu/douyin-go)](https://goreportcard.com/report/github.com/guaidashu/douyin-go)
-[![Version](https://img.shields.io/github/release/guaidashu/douyin-go.svg?style=flat)](https://github.com/guaidashu/douyin-go/releases/latest)
-[![Reference](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](http://godoc.org/github.com/guaidashu/douyin-go)
-[![Licence](https://img.shields.io/github/license/guaidashu/douyin-go?style=flat)](https://github.com/guaidashu/douyin-go/blob/master/LICENSE)
+[![Build](https://img.shields.io/badge/github-passing-green?style=flat&logo=github)](https://code.byted.org/testproj/douyin-go/actions/workflows/go.yml)
+[![Go Report Card](https://goreportcard.com/badge/code.byted.org/testproj/douyin-go)](https://goreportcard.com/report/code.byted.org/testproj/douyin-go)
+[![Version](https://img.shields.io/github/release/guaidashu/douyin-go.svg?style=flat)](https://code.byted.org/testproj/douyin-go/releases/latest)
+[![Reference](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](http://godoc.org/code.byted.org/testproj/douyin-go)
+[![Licence](https://img.shields.io/github/license/guaidashu/douyin-go?style=flat)](https://code.byted.org/testproj/douyin-go/blob/master/LICENSE)
 
 抖音开放平台SDK
 
 ## 安装
 ```go
-import douyinGo "github.com/guaidashu/douyin-go"
+import douyinGo "code.byted.org/testproj/douyin-go"
 ```
 ## 使用
 **初始化**

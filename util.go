@@ -7,7 +7,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/guaidashu/douyin-go/auth"
+	"code.byted.org/testproj/douyin-go/auth"
 )
 
 type transport struct {

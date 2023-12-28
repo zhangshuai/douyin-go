@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"github.com/guaidashu/douyin-go/conf"
+	"code.byted.org/testproj/douyin-go/conf"
 )
 
 // HotSearchSentencesReq 实时热点词请求

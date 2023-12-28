@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/guaidashu/douyin-go/conf"
+	"code.byted.org/testproj/douyin-go/conf"
 )
 
 // ItemCommentListReq 评论列表请求

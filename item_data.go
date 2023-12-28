@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/guaidashu/douyin-go/conf"
+	"code.byted.org/testproj/douyin-go/conf"
 )
 
 // DataExternalItemBaseReq 视频基础数据请求

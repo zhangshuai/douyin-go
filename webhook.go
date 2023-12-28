@@ -5,7 +5,7 @@ import (
 	"crypto/sha1"
 	"fmt"
 
-	"github.com/guaidashu/douyin-go/conf"
+	"code.byted.org/testproj/douyin-go/conf"
 )
 
 // WebhookEvent Webhook事件
