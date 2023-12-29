@@ -78,7 +78,13 @@ type OauthClientAccessTokenResData struct {
 // OauthClientAccessTokenRes client_token
 type OauthClientAccessTokenRes struct {
 	Data    OauthClientAccessTokenResData `json:"data"`
+	Extra   OauthClientAccessTokenExtra   `json:"extra"`
 	Message string                        `json:"message"`
+}
+
+type OauthClientAccessTokenExtra struct {
+	Logid string `json:"logid"`
+	Now   int64  `json:"now"`
 }
 
 type OauthClientAccessTokenBody struct {
