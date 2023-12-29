@@ -81,9 +81,27 @@ type OauthClientAccessTokenRes struct {
 	Message string                        `json:"message"`
 }
 
+type OauthClientAccessTokenBody struct {
+	ClientKey    string `json:"client_key"`
+	ClientSecret string `json:"client_secret"`
+	GrantType    string `json:"grant_type"`
+}
+
+// OauthClientAccessToken 生成client_token
+// func (m *Manager) OauthClientAccessToken() (res OauthClientAccessTokenRes, err error) {
+// 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=client_credential&client_key=%s&client_secret=%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret), nil, nil)
+// 	return res, err
+// }
+
 // OauthClientAccessToken 生成client_token
 func (m *Manager) OauthClientAccessToken() (res OauthClientAccessTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=client_credential&client_key=%s&client_secret=%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret), nil, nil)
+	body := &OauthClientAccessTokenBody{
+		ClientKey:    m.Credentials.ClientKey,
+		ClientSecret: m.Credentials.ClientSecret,
+		GrantType:    "client_credential",
+	}
+
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN), nil, body)
 	return res, err
 }
 
