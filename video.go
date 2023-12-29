@@ -253,7 +253,7 @@ type (
 	}
 
 	VideoIdToItemIdRes struct {
-		Data VideoDataResData `json:"data"`
+		Data VideoIdToItemIdData `json:"data"`
 		DYError
 	}
 
