@@ -14,7 +14,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 const (
@@ -208,9 +208,9 @@ func (m *Manager) VideoDelete(req VideoDeleteReq) (res VideoDeleteRes, err error
 
 // VideoDataReq 视频数据请求
 type VideoDataReq struct {
-	OpenId      string        // 通过/oauth/access_token/获取，用户唯一标志
-	AccessToken string        // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	Body        VideoDataBody // 视频数据body
+	OpenId      string         // 通过/oauth/access_token/获取，用户唯一标志
+	AccessToken string         // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	Body        *VideoDataBody // 视频数据body
 }
 
 // VideoDataBody 视频数据
@@ -229,11 +229,47 @@ type VideoDataResData struct {
 type VideoDataRes struct {
 	Data  VideoDataResData `json:"data"`
 	Extra DYExtra          `json:"extra"`
+	DYError
 }
 
 // VideoData 查询指定视频数据
 func (m *Manager) VideoData(req VideoDataReq) (res VideoDataRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?access_token=%s&open_id=%s", conf.API_VIDEO_DATA, req.AccessToken, req.OpenId), nil, req.Body)
+	header := http.Header{}
+	header.Add("access-token", req.AccessToken)
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s?open_id=%s", conf.API_VIDEO_DATA, req.OpenId), header, req.Body)
+	return res, err
+}
+
+type (
+	VideoIdToItemIdReqBody struct {
+		VideoIds  []string `json:"video_ids"`
+		AccessKey string   `json:"access_key"`
+		AppId     string   `json:"app_id"`
+	}
+
+	VideoIdToItemIdReq struct {
+		ClientAccessToken string // client_token
+		Body              *VideoIdToItemIdReqBody
+	}
+
+	VideoIdToItemIdRes struct {
+		Data VideoIdToItemIdData `json:"data"`
+		DYError
+	}
+
+	VideoIdToItemIdData struct {
+		ConvertResult map[string]string `json:"convert_result"`
+	}
+)
+
+// VideoIdToItemId videoId转为itemId
+func (m *Manager) VideoIdToItemId(req VideoIdToItemIdReq) (res VideoIdToItemIdRes, err error) {
+	header := http.Header{}
+	header.Add("access-token", req.ClientAccessToken)
+	req.Body.AccessKey = m.Credentials.ClientSecret
+	req.Body.AppId = m.Credentials.ClientKey
+
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_VIDEO_ID_CONVERT_TO_ITEM_ID), header, req.Body)
 	return res, err
 }
 

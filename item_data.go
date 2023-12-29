@@ -2,9 +2,10 @@ package douyingo
 
 import (
 	"context"
+	"net/http"
 	"net/url"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // DataExternalItemBaseReq 视频基础数据请求
@@ -137,7 +138,10 @@ type DataExternalItemPlayRes struct {
 // DataExternalItemPlay 获取视频播放数据
 func (m *Manager) DataExternalItemPlay(req DataExternalItemPlayReq) (res DataExternalItemPlayRes, err error) {
 	itemId := url.QueryEscape(req.ItemId)
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?access_token=%s&open_id=%s&item_id=%s&date_type=%d", conf.API_DATA_EXTERNAL_ITEM_PLAY, req.AccessToken, req.OpenId, itemId, req.DateType), nil, nil)
+	header := http.Header{}
+	header.Add("access-token", req.AccessToken)
+
+	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?open_id=%s&item_id=%s&date_type=%d", conf.API_DATA_EXTERNAL_ITEM_PLAY, req.OpenId, itemId, req.DateType), header, nil)
 	return res, err
 }
 

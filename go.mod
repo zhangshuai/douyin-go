@@ -1,5 +1,3 @@
-module github.com/zhangshuai/douyin-go
+module github.com/guaidashu/douyin-go
 
 go 1.14
-
-require ()

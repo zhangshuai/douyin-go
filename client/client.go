@@ -13,8 +13,8 @@ import (
 	"net/http/httputil"
 	"strings"
 
-	"github.com/zhangshuai/douyin-go/internal/log"
-	"github.com/zhangshuai/douyin-go/reqid"
+	"github.com/guaidashu/douyin-go/internal/log"
+	"github.com/guaidashu/douyin-go/reqid"
 )
 
 // UserAgent UA

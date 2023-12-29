@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"github.com/zhangshuai/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // OauthParam 授权参数
@@ -22,6 +22,14 @@ func (m *Manager) OauthConnect(param OauthParam) string {
 // OauthAccessTokenReq access_token请求
 type OauthAccessTokenReq struct {
 	Code string // 授权码
+}
+
+// OauthAccessTokenReq access_token请求
+type OauthAccessTokenBody struct {
+	Code         string `json:"code"`          // 授权码
+	ClientSecret string `json:"client_secret"` // 密钥
+	GrantType    string `json:"grant_type"`    // 固定值"authorization_code"
+	ClientKey    string `json:"client_key"`    // accessKey
 }
 
 // OauthAccessTokenResData access_token
@@ -43,8 +51,20 @@ type OauthAccessTokenRes struct {
 }
 
 // OauthAccessToken 获取access_token
+// func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessTokenRes, err error) {
+// 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=authorization_code&client_key=%s&client_secret=%s&code=%s", conf.API_OAUTH_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret, req.Code), nil, nil)
+// 	return res, err
+// }
+
+// OauthAccessToken 获取access_token
 func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=authorization_code&client_key=%s&client_secret=%s&code=%s", conf.API_OAUTH_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret, req.Code), nil, nil)
+	body := &OauthAccessTokenBody{
+		Code:         req.Code,
+		ClientKey:    m.Credentials.ClientKey,
+		ClientSecret: m.Credentials.ClientSecret,
+		GrantType:    "authorization_code",
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_ACCESS_TOKEN), nil, body)
 	return res, err
 }
 
@@ -58,18 +78,48 @@ type OauthClientAccessTokenResData struct {
 // OauthClientAccessTokenRes client_token
 type OauthClientAccessTokenRes struct {
 	Data    OauthClientAccessTokenResData `json:"data"`
+	Extra   OauthClientAccessTokenExtra   `json:"extra"`
 	Message string                        `json:"message"`
 }
 
+type OauthClientAccessTokenExtra struct {
+	Logid string `json:"logid"`
+	Now   int64  `json:"now"`
+}
+
+type OauthClientAccessTokenBody struct {
+	ClientKey    string `json:"client_key"`
+	ClientSecret string `json:"client_secret"`
+	GrantType    string `json:"grant_type"`
+}
+
+// OauthClientAccessToken 生成client_token
+// func (m *Manager) OauthClientAccessToken() (res OauthClientAccessTokenRes, err error) {
+// 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=client_credential&client_key=%s&client_secret=%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret), nil, nil)
+// 	return res, err
+// }
+
 // OauthClientAccessToken 生成client_token
 func (m *Manager) OauthClientAccessToken() (res OauthClientAccessTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=client_credential&client_key=%s&client_secret=%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN, m.Credentials.ClientKey, m.Credentials.ClientSecret), nil, nil)
+	body := &OauthClientAccessTokenBody{
+		ClientKey:    m.Credentials.ClientKey,
+		ClientSecret: m.Credentials.ClientSecret,
+		GrantType:    "client_credential",
+	}
+
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_CLIENT_ACCESS_TOKEN), nil, body)
 	return res, err
 }
 
 // OauthRefreshTokenReq 刷新access_token请求
 type OauthRefreshTokenReq struct {
 	RefreshToken string // 填写通过access_token获取到的refresh_token参数
+}
+
+type OauthRefreshTokenReqBody struct {
+	ClientKey    string `json:"client_key"`    // 应用唯一标识
+	GrantType    string `json:"grant_type"`    // 固定值“refresh_token”
+	RefreshToken string `json:"refresh_token"` // 填写通过access_token获取到的refresh_token参数
 }
 
 // OauthRefreshTokenResData 刷新access_token
@@ -90,14 +140,30 @@ type OauthRefreshTokenRes struct {
 }
 
 // OauthRefreshToken 刷新access_token
+// func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res OauthRefreshTokenRes, err error) {
+// 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=refresh_token&client_key=%s&refresh_token=%s", conf.API_OAUTH_REFRESH_TOKEN, m.Credentials.ClientKey, req.RefreshToken), nil, nil)
+// 	return res, err
+// }
+
 func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res OauthRefreshTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?grant_type=refresh_token&client_key=%s&refresh_token=%s", conf.API_OAUTH_REFRESH_TOKEN, m.Credentials.ClientKey, req.RefreshToken), nil, nil)
+	body := &OauthRefreshTokenReqBody{
+		ClientKey:    m.Credentials.ClientKey,
+		GrantType:    "refresh_token",
+		RefreshToken: req.RefreshToken,
+	}
+
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_REFRESH_TOKEN), nil, body)
 	return res, err
 }
 
 // OauthRenewRefreshTokenReq 刷新refresh_token请求
 type OauthRenewRefreshTokenReq struct {
 	RefreshToken string // 填写通过access_token获取到的refresh_token参数
+}
+
+type OauthRenewRefreshTokenReqBody struct {
+	ClientKey    string `json:"client_key"`    // 应用唯一标识
+	RefreshToken string `json:"refresh_token"` // 填写通过access_token获取到的refresh_token参数
 }
 
 // OauthRenewRefreshTokenResData 刷新refresh_token
@@ -114,8 +180,17 @@ type OauthRenewRefreshTokenRes struct {
 }
 
 // OauthRenewRefreshToken 刷新refresh_token
+// func (m *Manager) OauthRenewRefreshToken(req OauthRenewRefreshTokenReq) (res OauthRenewRefreshTokenRes, err error) {
+// 	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?client_key=%s&refresh_token=%s", conf.API_OAUTH_RENEW_REFRESH_TOKEN, m.Credentials.ClientKey, req.RefreshToken), nil, nil)
+// 	return res, err
+// }
+
 func (m *Manager) OauthRenewRefreshToken(req OauthRenewRefreshTokenReq) (res OauthRenewRefreshTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?client_key=%s&refresh_token=%s", conf.API_OAUTH_RENEW_REFRESH_TOKEN, m.Credentials.ClientKey, req.RefreshToken), nil, nil)
+	body := &OauthRenewRefreshTokenReqBody{
+		RefreshToken: req.RefreshToken,
+		ClientKey:    m.Credentials.ClientKey,
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_RENEW_REFRESH_TOKEN), nil, body)
 	return res, err
 }
 
