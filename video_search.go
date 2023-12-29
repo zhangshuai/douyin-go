@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/url"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // VideoSearchReq 关键词视频搜索请求

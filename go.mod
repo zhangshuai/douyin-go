@@ -1,3 +1,3 @@
-module code.byted.org/testproj/douyin-go
+module github.com/guaidashu/douyin-go
 
 go 1.14

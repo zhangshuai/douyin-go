@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // MarketServicePurchaseListReq 查询用户的服务购买信息请求

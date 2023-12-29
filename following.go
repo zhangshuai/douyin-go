@@ -3,7 +3,7 @@ package douyingo
 import (
 	"context"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // FollowingListReq 关注列表请求

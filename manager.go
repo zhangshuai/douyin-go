@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"code.byted.org/testproj/douyin-go/auth"
-	"code.byted.org/testproj/douyin-go/client"
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/auth"
+	"github.com/guaidashu/douyin-go/client"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // Manager Manager结构体

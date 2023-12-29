@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // DataExternalItemBaseReq 视频基础数据请求

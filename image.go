@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // ImageUploadReq 上传图片到文件服务器请求

@@ -5,7 +5,7 @@ import (
 	"crypto/md5"
 	"fmt"
 
-	"code.byted.org/testproj/douyin-go/conf"
+	"github.com/guaidashu/douyin-go/conf"
 )
 
 // JsTicketReq jsapi_ticket请求
